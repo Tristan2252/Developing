@@ -4,7 +4,7 @@ from themer import Config
 test = Config("gnome-shell.css")
 
 print()
-test.change_setting("#panel", "background-color", "#90000")
+test.change_setting("#panel", "background-color", "#90")
 print()
 test.change_setting(".candidate-popup-boxpointer", "-arrow-background-color", "#2252")
 test.write_config()

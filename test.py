@@ -1,22 +1,10 @@
 #!/usr/bin/env python3
+from themer import Config
 
-def css_edit():
-    import cssutils
+test = Config("gnome-shell.css")
 
-    # Parse the stylesheet, replace color
-    parser = cssutils.parseFile('gnome-shell.css')
-    for rule in parser.cssRules:
-        try:
-            if 'popup-menu-boxpointer' in rule.selectorText:
-                print(rule.style)
-                # rule.style.backgroundColor = 'blue'  # Replace background
-        except AttributeError as e:
-            pass  # Ignore error if the rule does not have background
-
-    # Write to a new file
-    with open('style_new.css', 'wb') as f:
-        f.write(parser.cssText)
-
-
-css_edit()
-
+print()
+test.change_setting("#panel", "background-color", "#90000")
+print()
+test.change_setting(".candidate-popup-boxpointer", "-arrow-background-color", "#2252")
+test.write_config()

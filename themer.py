@@ -1,21 +1,41 @@
-import cssutils
 
+class Config(object):
+    def __init__(self, path):
+        self._path = path
+        self._config = self.open_file()
+        self._editing = False
+        self._setting_index = 0
 
-# parser = cssutils.parseFile('gnome-shell.css')
+    def open_file(self):
+        with open(self._path) as f:
+            return f.readlines()
 
-def change_setting(setting, value):
-    # Parse the stylesheet, replace color
-    for rule in parser.cssRules:
-        try:
-            if rule.selectorText == setting:
-                rule.style.backgroundColor = value  # Replace background
-        except AttributeError as e:
-            pass  # Ignore error if the rule does not have background
+    def change_setting(self, method, setting, value):
+        method += " {\n"
+        setting += ": "
+        value += ";"
+        self.test_method(method)
+        for line in self._config:
+            if line == method:
+                self._editing = True
+                self._setting_index = self._config.index(method)
+            if self._editing:
+                self._setting_index += 1
+                if setting in line:
+                    print("Changed {}to {}{}".format(self._config[self._setting_index], setting, value))
+                    self._config[self._setting_index] = "    {}{}\n".format(setting, value)
+                    self._editing = False
 
+    def write_config(self):
+        with open('style_new.css', 'w') as f:
+            f.writelines(self._config)
 
-def write_config():
-    with open('style_new.css', 'wb') as f:
-        f.write(parser.cssText)
+    def test_method(self, method):
+        if method in self._config:
+            return True
+        else:
+            print("ERROR: " + method + " not found")
+            return False
 
 
 class HexColor(object):

@@ -26,20 +26,24 @@ class Config(object):
         :param value: str # string representing value to set the setting to
         :return: None
         """
+        print("\n{}".format(method))
         method += " {\n"
         setting = "    {}:".format(setting)
         value += ";"
-        self.test_method(method)
         for line in self._config:
             if line == method:
                 self._editing = True
                 self._setting_index = self._config.index(method)
             if self._editing:
-                if setting == line[:len(setting)]:
+                if "}" in line:
+                    print("{} NOT FOUND".format(setting))
+                    self._editing = False
+                    return False
+                elif setting == line[:len(setting)]:
                     print("\nPrevious {}Changed {} {}".format(self._config[self._setting_index], setting, value))
                     self._config[self._setting_index] = "{} {}\n".format(setting, value)
                     self._editing = False
-                    break
+                    return True
             self._setting_index += 1
 
     def write_config(self):
@@ -50,19 +54,28 @@ class Config(object):
         with open('style_new.css', 'w') as f:
             f.writelines(self._config)
 
-    def test_method(self, method):
+    def test_method(self, method, setting):
         """
         method tests if the specified method exists
         within the config file.
         :param method: str # method to find
         :return: bool # if it is found or not
         """
-        if method in self._config:
-            return True
-        else:
-            print("ERROR: " + method + " not found")
-            return False
-
+        method += " {\n"
+        setting = "    {}:".format(setting)
+        for line in self._config:
+            if line == method:
+                self._editing = True
+                self._setting_index = self._config.index(method)
+            if self._editing:
+                if "}" in line:
+                    print("{} NOT FOUND".format(setting))
+                    self._editing = False
+                    return False
+                elif setting == line[:len(setting)]:
+                    self._editing = False
+                    return True
+            self._setting_index += 1
 
 class HexColor(object):
     def __init__(self, rgb_color):
@@ -76,3 +89,8 @@ class HexColor(object):
         blue = (self.blue * 255)
 
         return "#%02x%02x%02x" % (red, green, blue)
+
+
+def get_panel_methods():
+    return ["#panel", ".panel-button:hover:overview",
+            ".panel-button:focus", ]

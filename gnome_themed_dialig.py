@@ -11,3 +11,15 @@ class SaveDialog(Gtk.Dialog):
 
         box.add(self.text)
         self.show_all()
+
+class ErrorDialog(Gtk.Dialog):
+    def __init__(self, parent, setting, method):
+        Gtk.Dialog.__init__(self, "Error", parent, 0,
+                            (Gtk.STOCK_OK, Gtk.ResponseType.OK))
+
+        self.set_border_width(10)
+        box = self.get_content_area()
+        self.error = Gtk.Label("{} Does not exist for {}\n".format(setting, method))
+
+        box.add(self.error)
+        self.show_all()

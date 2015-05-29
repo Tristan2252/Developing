@@ -175,7 +175,7 @@ StScrollBar StButton#hhandle:active {
     -arrow-border-radius: 4px;
     -arrow-border-width: 1px;
     /* -arrow-background-color: #31363d; */
-    -arrow-background-color: #31363d;
+    -arrow-background-color: #555753;
     -arrow-border-color: #1f333c;
     -arrow-base: 21px;
     -arrow-rise: 9px;
@@ -632,7 +632,7 @@ StScrollBar StButton#hhandle:active {
     background-image: none;
     background-gradient-direction: none;
     /*background-color: #31363d;*/
-    background-color: #3465a4;
+    background-color: #8ae234;
     font-weight: bold;
     height: 32px;
     transition-duration: 100ms;

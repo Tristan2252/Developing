@@ -1,7 +1,7 @@
 from gi.repository import Gtk
 import gnome_themed_dialig
 import themer
-
+import themed_menu
 
 class GnomeThemed(Gtk.Window):
     def __init__(self):
@@ -10,12 +10,24 @@ class GnomeThemed(Gtk.Window):
         self.hex_color = None
         self.config = themer.Config("gnome-shell.css")
 
+        # ______________________ Setting up Window _________________________
         self.set_default_size(600, 600)
         self.box_main = Gtk.Box(True)
-        self.table = Gtk.Table(10, 7, True)
+        self.table = Gtk.Table(10, 7, True)  # (y)row, column(x)
         self.box_main.add(self.table)
         self.add(self.box_main)
 
+        # ___________________________ Menu Setup __________________________
+        self.menu_bar = Gtk.MenuBar()
+        # self.table.attach(self.menu_bar, 0, 7, 0, 1, ypadding=10)
+
+        self.file = themed_menu.Menu(self, "File")
+        self.file.add_item("Save")
+        self.file.add_item("Edit")
+        self.edit = themed_menu.Menu(self, "Test")
+        self.edit.add_item("Sub Menu")
+
+        # ____________________________ Buttons _____________________________
         self.panel_btn = Gtk.ColorButton()
         self.panel_btn.connect("color-set", self.on_button_clicked, self.panel_btn,
                                "#panel", "background-color")
@@ -29,9 +41,11 @@ class GnomeThemed(Gtk.Window):
         self.save_btn = Gtk.Button("Save")
         self.save_btn.connect("clicked", self.on_saved_clicked)
 
+        # ___________________________ Labels ______________________________
         self.panel_txt = Gtk.Label("Panel Color")
         self.popup_txt = Gtk.Label("Popup Menu")
 
+        # ________________________ Table Attachments ______________________
         self.table.attach(self.panel_txt, 1, 2, 1, 2, xpadding=10)
         self.table.attach(self.panel_btn, 2, 3, 1, 2, ypadding=10)
         self.table.attach(self.popup_txt, 1, 2, 2, 3)

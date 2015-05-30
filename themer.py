@@ -1,4 +1,3 @@
-
 class Config(object):
     def __init__(self, path):
         self._path = path
@@ -51,6 +50,7 @@ class Config(object):
         wires self._config to new file
         :return: None
         """
+        print("file saved")
         with open('style_new.css', 'w') as f:
             f.writelines(self._config)
 
@@ -77,6 +77,7 @@ class Config(object):
                     return True
             self._setting_index += 1
 
+
 class HexColor(object):
     def __init__(self, rgb_color):
         self.red = rgb_color.red
@@ -91,6 +92,13 @@ class HexColor(object):
         return "#%02x%02x%02x" % (red, green, blue)
 
 
-def get_panel_methods():
-    return ["#panel", ".panel-button:hover:overview",
-            ".panel-button:focus", ]
+def get_methods():
+    panel_methods = ("#panel", "#panel:overview", ".panel-button:hover:overview", ".panel-button:focus")
+    popup_methods = (".candidate-popup-boxpointer", ".popup-menu-item:active", ".popup-sub-menu",
+                     ".popup-submenu-menu-item:open")
+    return panel_methods + popup_methods
+
+def get_settings():
+    panel_settings = ("background-color", "border-color")
+    popup_settings = ("background-color", "-arrow-background-color", "-arrow-border-color")
+    return panel_settings + popup_settings

@@ -175,7 +175,7 @@ StScrollBar StButton#hhandle:active {
     -arrow-border-radius: 4px;
     -arrow-border-width: 1px;
     /* -arrow-background-color: #31363d; */
-    -arrow-background-color: #555753;
+    -arrow-background-color: #31363d;
     -arrow-border-color: #1f333c;
     -arrow-base: 21px;
     -arrow-rise: 9px;
@@ -632,7 +632,7 @@ StScrollBar StButton#hhandle:active {
     background-image: none;
     background-gradient-direction: none;
     /*background-color: #31363d;*/
-    background-color: #8ae234;
+    background-color: #000000;
     font-weight: bold;
     height: 32px;
     transition-duration: 100ms;
@@ -642,7 +642,7 @@ StScrollBar StButton#hhandle:active {
 #panel.in-overview,
 #panel:overview {
     background-gradient-direction: none;
-    background-color: transparent;
+    background-color: #75507b;
     border-color: transparent;
 }
 

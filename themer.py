@@ -1,3 +1,5 @@
+from gi.repository import Gtk
+
 class Config(object):
     def __init__(self, path):
         self._path = path
@@ -92,13 +94,17 @@ class HexColor(object):
         return "#%02x%02x%02x" % (red, green, blue)
 
 
-def get_methods():
-    panel_methods = ("#panel", "#panel:overview", ".panel-button:hover:overview", ".panel-button:focus")
-    popup_methods = (".candidate-popup-boxpointer", ".popup-menu-item:active", ".popup-sub-menu",
-                     ".popup-submenu-menu-item:open")
-    return panel_methods + popup_methods
-
-def get_settings():
-    panel_settings = ("background-color", "border-color")
-    popup_settings = ("background-color", "-arrow-background-color", "-arrow-border-color")
-    return panel_settings + popup_settings
+def get(item):
+    if item == "panel methods":
+        panel_methods = ("#panel", "#panel:overview", ".panel-button:hover:overview", ".panel-button:focus")
+        return panel_methods
+    if item == "panel settings":
+        panel_settings = ("background-color", "border-color")
+        return panel_settings
+    if item == "popup methods":
+        popup_methods = (".candidate-popup-boxpointer", ".popup-menu-item:active", ".popup-sub-menu",
+                         ".popup-submenu-menu-item:open")
+        return popup_methods
+    if item == "popup settings":
+        popup_settings = ("background-color", "-arrow-background-color", "-arrow-border-color")
+        return popup_settings

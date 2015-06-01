@@ -7,7 +7,7 @@ class SaveDialog(Gtk.Dialog):
                              Gtk.STOCK_NO, Gtk.ResponseType.NO))
 
         box = self.get_content_area()
-        self.text = Gtk.Label("Save changes to config file?")
+        self.text = Gtk.Label("  Save changes to config file?  ")
 
         box.add(self.text)
         self.show_all()

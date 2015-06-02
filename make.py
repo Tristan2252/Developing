@@ -1,4 +1,6 @@
 from gi.repository import Gtk
+import themer
+
 
 class SaveDialog(Gtk.Dialog):
     def __init__(self, parent):
@@ -12,6 +14,7 @@ class SaveDialog(Gtk.Dialog):
         box.add(self.text)
         self.show_all()
 
+
 class ErrorDialog(Gtk.Dialog):
     def __init__(self, parent, setting, method):
         Gtk.Dialog.__init__(self, "Error", parent, 0,
@@ -23,3 +26,21 @@ class ErrorDialog(Gtk.Dialog):
 
         box.add(self.error)
         self.show_all()
+
+
+class CustomButton(Gtk.Button):
+    def __init__(self, parent, name, icon_image):
+        super(CustomButton, self).__init__("  {} Settings".format(name))  # Set base class
+
+        self.set_image(icon_image)
+        self.set_image_position(Gtk.PositionType.LEFT)
+        self.set_relief(Gtk.ReliefStyle.NONE)
+        self.connect("clicked", parent.on_button_clicked,
+                     themer.get("{} methods".format(name)),
+                     themer.get("{} settings".format(name)))
+
+
+class Image(Gtk.Image):
+    def __init__(self, path):
+        super(Image, self).__init__()
+        self.set_from_file(path)

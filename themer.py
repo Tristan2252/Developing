@@ -95,16 +95,16 @@ class HexColor(object):
 
 
 def get(item):
-    if item == "panel methods":
+    if item == "Panel methods":
         panel_methods = ("#panel", "#panel:overview", ".panel-button:hover:overview", ".panel-button:focus")
         return panel_methods
-    if item == "panel settings":
+    if item == "Panel settings":
         panel_settings = ("background-color", "border-color")
         return panel_settings
-    if item == "popup methods":
+    if item == "Popup methods":
         popup_methods = (".candidate-popup-boxpointer", ".popup-menu-item:active", ".popup-sub-menu",
                          ".popup-submenu-menu-item:open")
         return popup_methods
-    if item == "popup settings":
+    if item == "Popup settings":
         popup_settings = ("background-color", "-arrow-background-color", "-arrow-border-color")
         return popup_settings

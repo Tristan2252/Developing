@@ -1,6 +1,7 @@
 from gi.repository import Gtk
-import gnome_themed_dialig
+import make
 import themer
+
 
 class SettingsDialog(Gtk.Dialog):
     def __init__(self, parent, methods, settings):
@@ -64,6 +65,6 @@ class SettingsDialog(Gtk.Dialog):
                 if self.parent.config.test_method(method, setting):
                     self.parent.config.change_setting(method, setting, self.hex_color)
                 else:
-                    error = gnome_themed_dialig.ErrorDialog(self, setting, method)
+                    error = make.ErrorDialog(self, setting, method)
                     error.run()
                     error.destroy()

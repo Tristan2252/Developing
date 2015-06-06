@@ -1,4 +1,5 @@
-from gi.repository import Gtk
+import subprocess
+DEBUG = True
 
 class Config(object):
     def __init__(self, path):
@@ -27,7 +28,7 @@ class Config(object):
         :param value: str # string representing value to set the setting to
         :return: None
         """
-        print("\n{}".format(method))
+        print("\n{}".format(method)) if DEBUG else None
         method += " {\n"
         setting = "    {}:".format(setting)
         value += ";"
@@ -37,12 +38,16 @@ class Config(object):
                 self._setting_index = self._config.index(method)
             if self._editing:
                 if "}" in line:
-                    print("{} NOT FOUND".format(setting))
+                    print("{} NOT FOUND".format(setting)) if DEBUG else None
                     self._editing = False
                     return False
                 elif setting == line[:len(setting)]:
-                    print("\nPrevious {}Changed {} {}".format(self._config[self._setting_index], setting, value))
-                    self._config[self._setting_index] = "{} {}\n".format(setting, value)
+                    print("\nPrevious {}Changed {} {}"
+                          "".format(self._config[self._setting_index], setting, value)) if DEBUG else None
+                    if "1px solid" in self._config[self._setting_index]:  # accounts for border with in value
+                        self._config[self._setting_index] = "{} 1px solid {}\n".format(setting, value)
+                    else:
+                        self._config[self._setting_index] = "{} {}\n".format(setting, value)
                     self._editing = False
                     return True
             self._setting_index += 1
@@ -52,7 +57,7 @@ class Config(object):
         wires self._config to new file
         :return: None
         """
-        print("file saved")
+        print("\n[FILE SAVED]") if DEBUG else None
         with open('style_new.css', 'w') as f:
             f.writelines(self._config)
 
@@ -71,7 +76,7 @@ class Config(object):
                 self._setting_index = self._config.index(method)
             if self._editing:
                 if "}" in line:
-                    print("{} NOT FOUND".format(setting))
+                    print("{} NOT FOUND".format(setting)) if DEBUG else None
                     self._editing = False
                     return False
                 elif setting == line[:len(setting)]:
@@ -94,6 +99,19 @@ class HexColor(object):
         return "#%02x%02x%02x" % (red, green, blue)
 
 
+class About(object):
+    def __init__(self):
+        self.about_location = "README.md"
+        self.contents = self.open_about()
+
+    def open_about(self):
+        with open(self.about_location) as f:
+            return f.readlines()
+
+    def get_text(self):
+        return "".join(self.contents)
+
+
 def get(item):
     if item == "Panel methods":
         panel_methods = ("#panel", "#panel:overview", ".panel-button:hover:overview", ".panel-button:focus")
@@ -108,3 +126,17 @@ def get(item):
     if item == "Popup settings":
         popup_settings = ("background-color", "-arrow-background-color", "-arrow-border-color")
         return popup_settings
+    if item == "Button methods":
+        button_methods = (".app-view-control", ".modal-dialog-button:hover", ".app-view-control:focus",
+                          ".app-view-control:focus:hover", ".app-view-control:focus:active")
+        return button_methods
+    if item == "Button settings":
+        button_settings = ("border", "background-color", "color")
+        return button_settings
+
+
+def update():
+    if DEBUG:
+        pass
+    else:
+        subprocess.call("git pull", shell=True)

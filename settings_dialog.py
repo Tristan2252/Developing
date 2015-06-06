@@ -9,6 +9,7 @@ class SettingsDialog(Gtk.Dialog):
                             (Gtk.STOCK_OK, Gtk.ResponseType.OK))
 
         box = self.get_content_area()
+        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_border_width(5)
         self.table = Gtk.Table(6, 6)
         self.table.set_col_spacings(5)
@@ -29,14 +30,26 @@ class SettingsDialog(Gtk.Dialog):
             self.setting_dict[setting].connect("clicked", self.on_setting_clicked, setting)
 
         for i, label in enumerate(self.method_dict):
-            self.table.attach(self.method_dict[label], i+1, i+2, 1, 2)
+            if i in range(3):
+                self.table.attach(self.method_dict[label], i+1, i+2, 1, 2)
+            elif i in range(3, 6):  # second row so that window doesnt get too big
+                self.table.attach(self.method_dict[label], i-2, i-1, 2, 3)
 
         for i, label in enumerate(self.setting_dict):
-            self.table.attach(self.setting_dict[label], i+1, i+2, 3, 4)
+            self.table.attach(self.setting_dict[label], i+1, i+2, 4, 5)
 
         self.color_btn = Gtk.ColorButton()
         self.color_btn.connect("color-set", self.on_button_clicked, self.color_btn)
-        self.table.attach(self.color_btn, 1, 2, 4, 5)
+        self.method_txt = Gtk.Label()
+        self.method_txt.set_markup("<b>Methods</b>")
+        self.method_txt.set_justify(Gtk.Justification.LEFT)
+        self.setting_txt = Gtk.Label()
+        self.setting_txt.set_markup("<b>Settings</b>")
+        self.setting_txt.set_justify(Gtk.Justification.LEFT)
+        self.table.attach(self.method_txt, 1, 2, 0, 1, ypadding=10)
+        self.table.attach(self.setting_txt, 1, 2, 3, 4, ypadding=10)
+
+        self.table.attach(self.color_btn, 1, 2, 5, 6)
 
         box.add(self.table)
         self.show_all()
@@ -47,7 +60,7 @@ class SettingsDialog(Gtk.Dialog):
         else:
             self.method_lst.append(method)
 
-        print(self.method_lst)
+        print(self.method_lst) if themer.DEBUG else None
 
     def on_setting_clicked(self, widget, setting):
         if setting in self.setting_lst:
@@ -55,7 +68,7 @@ class SettingsDialog(Gtk.Dialog):
         else:
             self.setting_lst.append(setting)
 
-        print(self.setting_lst)
+        print(self.setting_lst) if themer.DEBUG else None
 
     def on_button_clicked(self, widget, button):
         color = themer.HexColor(button.get_rgba())
@@ -65,6 +78,6 @@ class SettingsDialog(Gtk.Dialog):
                 if self.parent.config.test_method(method, setting):
                     self.parent.config.change_setting(method, setting, self.hex_color)
                 else:
-                    error = make.ErrorDialog(self, setting, method)
+                    error = make.SettingError(self, setting, method)
                     error.run()
                     error.destroy()

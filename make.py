@@ -98,3 +98,15 @@ class AboutDialog(Gtk.Dialog):
         box.add(scroll_box)
         self.show_all()
 
+
+class BackupDialog(Gtk.Dialog):
+    def __init__(self, parent):
+        Gtk.Dialog.__init__(self, "Restore Backup", parent, 0,
+                            (Gtk.STOCK_OK, Gtk.ResponseType.OK,
+                             Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL))
+
+        bax = self.get_content_area()
+
+        self.add(bax)
+        self.show_all()
+

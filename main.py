@@ -31,7 +31,7 @@ class Main(Gtk.Window):
         self.about.add_item("Update", self.run_update)
 
         self.backup = make.Menu("Backup", self.menu_bar)
-        self.backup.add_item("Restore Backup", self.run_update)
+        self.backup.add_item("Restore Backup", self.backup_dialog)
 
         self.panel_img = make.Image("icons/panel.png")
         self.popup_img = make.Image("icons/popup.png")
@@ -101,12 +101,17 @@ class Main(Gtk.Window):
         about_dialog.run()
         about_dialog.destroy()
 
+    def backup_dialog(self, widget):
+        backup_prompt = make.BackupDialog(self)
+        responce = backup_prompt.run()
+        backup_prompt.destroy()
+
     @staticmethod
     def run_update(widget):
         themer.update()
 
     def exit(self, widget):
-        self.config.write_config()
+        self.save_file()
         Gtk.main_quit()
 
 if __name__ == '__main__':

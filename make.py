@@ -25,7 +25,6 @@ class SettingError(Gtk.Dialog):
         self.error = Gtk.Label()
         self.error.set_markup("\n\tSorry, <i>{}</i>  \n"
                               "Does not exist for <i>{}</i>\n".format(setting, method))
-
         box.add(self.error)
         self.show_all()
 
@@ -34,7 +33,6 @@ class GenericError(Gtk.Dialog):
     def __init__(self, parent, error_text):
         Gtk.Dialog.__init__(self, "Error", parent, 0,
                             (Gtk.STOCK_OK, Gtk.ResponseType.OK))
-
         box = self.get_content_area()
         self.error = Gtk.Label("\n{}\n".format(error_text))
         self.set_border_width(10)
@@ -78,7 +76,8 @@ class Menu(Gtk.MenuItem):
 class FileDialog(Gtk.FileChooserDialog):
     def __init__(self, parent):
         super(FileDialog, self).__init__("Please choose a file", parent, Gtk.FileChooserAction.OPEN,
-                                         (Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+                                         (Gtk.STOCK_OPEN, Gtk.ResponseType.OK,
+                                          Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL))
 
         if not themer.DEBUG:  # if not in debug mode
                 self.set_current_folder("/usr/share/themes/")

@@ -632,7 +632,7 @@ StScrollBar StButton#hhandle:active {
     background-image: none;
     background-gradient-direction: none;
     /*background-color: #31363d;*/
-    background-color: #000000;
+    background-color: #73d216;
     font-weight: bold;
     height: 32px;
     transition-duration: 100ms;

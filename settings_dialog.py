@@ -41,15 +41,15 @@ class SettingsDialog(Gtk.Dialog):
         self.color_btn = Gtk.ColorButton()
         self.color_btn.connect("color-set", self.on_button_clicked, self.color_btn)
         self.method_txt = Gtk.Label()
-        self.method_txt.set_markup("<b>Methods</b>")
+        self.method_txt.set_markup("<b>-- Methods --</b>")
         self.method_txt.set_justify(Gtk.Justification.LEFT)
         self.setting_txt = Gtk.Label()
-        self.setting_txt.set_markup("<b>Settings</b>")
+        self.setting_txt.set_markup("<b>-- Settings --</b>")
         self.setting_txt.set_justify(Gtk.Justification.LEFT)
         self.table.attach(self.method_txt, 1, 2, 0, 1, ypadding=10)
         self.table.attach(self.setting_txt, 1, 2, 3, 4, ypadding=10)
 
-        self.table.attach(self.color_btn, 1, 2, 5, 6)
+        self.table.attach(self.color_btn, 1, 2, 5, 6, ypadding=15)
 
         box.add(self.table)
         self.show_all()

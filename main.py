@@ -10,6 +10,7 @@ class Main(Gtk.Window):
         Gtk.Window.__init__(self, title="Main")
 
         self.box = Gtk.Box()
+        self.set_default_size(300, 100)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.table = Gtk.Table(6, 8)
         self.table.set_row_spacings(5)
@@ -29,6 +30,9 @@ class Main(Gtk.Window):
         self.about.add_item("About", self.run_about)
         self.about.add_item("Update", self.run_update)
 
+        self.backup = make.Menu("Backup", self.menu_bar)
+        self.backup.add_item("Restore Backup", self.run_update)
+
         self.panel_img = make.Image("icons/panel.png")
         self.popup_img = make.Image("icons/popup.png")
 
@@ -36,7 +40,7 @@ class Main(Gtk.Window):
         self.popup_settings = make.CustomButton(self, "Popup", self.popup_img)
         self.button_settings = make.CustomButton(self, "Button")
 
-        self.table.attach(self.menu_bar, 0, 3, 0, 1)
+        self.table.attach(self.menu_bar, 0, 3, 0, 1, xpadding=2)
         self.table.attach(self.panel_settings, 1, 2, 1, 2)
         self.table.attach(self.popup_settings, 1, 2, 2, 3)
         self.table.attach(self.button_settings, 1, 2, 3, 4)
@@ -49,6 +53,9 @@ class Main(Gtk.Window):
         if self.config is None:
             self.get_file()
             self.on_button_clicked(widget, methods, settings)
+
+        elif self.config == "":
+            self.config = None  # set back to None so that user can be prompted for file again
         else:
             settings = settings_dialog.SettingsDialog(self, methods, settings)
 
@@ -69,7 +76,10 @@ class Main(Gtk.Window):
         dialog = make.FileDialog(self)
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
-                self.config = themer.Config(dialog.get_filename())
+            self.config = themer.Config(dialog.get_filename())
+
+        else:
+            self.config = ""  # self.config needs to be set to something other than None else infinite loop
         dialog.destroy()
 
     def save_file(self, widget=None):
@@ -95,12 +105,12 @@ class Main(Gtk.Window):
     def run_update(widget):
         themer.update()
 
-    @staticmethod
-    def exit(widget):
+    def exit(self, widget):
+        self.config.write_config()
         Gtk.main_quit()
 
-
-win = Main()
-win.connect("delete-event", Gtk.main_quit)
-win.show_all()
-Gtk.main()
+if __name__ == '__main__':
+    win = Main()
+    win.connect("delete-event", Gtk.main_quit)
+    win.show_all()
+    Gtk.main()

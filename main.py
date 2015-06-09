@@ -13,7 +13,7 @@ class Main(Gtk.Window):
         self.box = Gtk.Box()
         self.set_default_size(300, 100)
         self.set_position(Gtk.WindowPosition.CENTER)
-        self.table = Gtk.Table(6, 8)
+        self.table = Gtk.Table(6, 5)
         self.table.set_row_spacings(5)
         self.config = None
 

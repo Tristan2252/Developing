@@ -1,7 +1,7 @@
 import subprocess
 import os.path as ospath
 
-DEBUG = False  # testing flag for development, Ex:activates print lines
+DEBUG = True  # testing flag for development, Ex:activates print lines
 
 
 class Config(object):
@@ -144,6 +144,9 @@ class About(object):
         return "".join(self.contents)
 
 
+CUSTOM_METHODS = []
+CUSTOM_SETTINGS = []
+
 def get(item):
     """
     returns requested settings or methods
@@ -170,6 +173,10 @@ def get(item):
     if item == "Button settings":
         button_settings = ("border", "background-color", "color")
         return sorted(button_settings)
+    if item == "Custom methods":
+        return CUSTOM_METHODS
+    if item == "Custom settings":
+        return CUSTOM_SETTINGS
 
 
 def update():

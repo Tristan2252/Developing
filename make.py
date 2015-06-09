@@ -143,3 +143,30 @@ class BackupDialog(Gtk.Dialog):
         """
         return self.backup_path
 
+
+class EntryDialog(Gtk.Dialog):
+    def __init__(self, parent):
+        Gtk.Dialog.__init__(self, "Custom Settings", parent, 0,
+                            (Gtk.STOCK_OK, Gtk.ResponseType.OK,
+                             Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL))
+
+        box = self.get_content_area()
+        self.set_border_width(10)
+        self.table = Gtk.Table(4, 4)
+        self.methods_entry = Gtk.Entry()
+        self.settings_entry = Gtk.Entry()
+        self.label = Gtk.Label("NOTE: Seperate each entry with ';' "
+                               "For methods do not include '{' "
+                               "And for settings do not include ':'\n")
+        self.method_text = Gtk.Label('Methods')
+        self.method_text.set_justify(Gtk.Justification.LEFT)
+        self.setting_text = Gtk.Label('Settings')
+        self.setting_text.set_justify(Gtk.Justification.LEFT)
+        self.table.attach(self.label, 1, 4, 1, 2)
+        self.table.attach(self.method_text, 0, 1, 2, 3, xpadding=5)
+        self.table.attach(self.methods_entry, 1, 4, 2, 3)
+        self.table.attach(self.setting_text, 0, 1, 3, 4, xpadding=5)
+        self.table.attach(self.settings_entry, 1, 4, 3, 4)
+        box.add(self.table)
+        self.show_all()
+

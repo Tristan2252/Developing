@@ -23,6 +23,7 @@ class Main(Gtk.Window):
         self.menu_bar = Gtk.MenuBar()
 
         self.file_menu = make.Menu("File", self.menu_bar)
+        self.file_menu.add_item("Custom Settings", self.make_custom_settings)
         self.file_menu.add_item("Open", self.open_file)
         self.file_menu.add_item("Save", self.save_file)
         self.file_menu.add_item("Exit", self.exit)
@@ -40,11 +41,13 @@ class Main(Gtk.Window):
         self.panel_settings = make.CustomButton(self, "Panel", self.panel_img)
         self.popup_settings = make.CustomButton(self, "Popup", self.popup_img)
         self.button_settings = make.CustomButton(self, "Button")
+        self.custom_settings = make.CustomButton(self, "Custom")
 
         self.table.attach(self.menu_bar, 0, 3, 0, 1, xpadding=2)
         self.table.attach(self.panel_settings, 1, 2, 1, 2)
         self.table.attach(self.popup_settings, 1, 2, 2, 3)
         self.table.attach(self.button_settings, 1, 2, 3, 4)
+        self.table.attach(self.custom_settings, 3, 4, 1, 2)
 
         self.box.add(self.table)
         self.add(self.box)
@@ -147,6 +150,26 @@ class Main(Gtk.Window):
             self.config = themer.Config(backup_prompt.get_path())
             self.save_file()
             self.config = None
+
+    def make_custom_settings(self, widget):
+        """
+        prompts user with dialog to add custom settings to app
+        :param widget: widget connection
+        :return: None
+        """
+        custom_dialog = make.EntryDialog(self)
+        response = custom_dialog.run()
+        if response == Gtk.ResponseType.OK:
+
+            methods = custom_dialog.methods_entry.get_text()
+            themer.CUSTOM_METHODS += methods.split(";") if methods\
+                else themer.CUSTOM_METHODS  # prevents check boxes from appearing in settings
+
+            settings = custom_dialog.settings_entry.get_text()
+            themer.CUSTOM_SETTINGS += settings.split(";") if methods\
+                else themer.CUSTOM_SETTINGS
+
+        custom_dialog.destroy()
 
     @staticmethod
     def run_update(widget):

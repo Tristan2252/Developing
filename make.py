@@ -102,11 +102,28 @@ class AboutDialog(Gtk.Dialog):
 class BackupDialog(Gtk.Dialog):
     def __init__(self, parent):
         Gtk.Dialog.__init__(self, "Restore Backup", parent, 0,
-                            (Gtk.STOCK_OK, Gtk.ResponseType.OK,
-                             Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL))
+                            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL))
 
-        bax = self.get_content_area()
+        box = self.get_content_area()
+        self.label = Gtk.Label("\nA '.DEFAULT' file was created before your first edit.\n"
+                               "You can use it to restore to default settings.\n")
+        self.backup_btn = Gtk.Button("Select Backup")
+        self.backup_btn.connect("clicked", self.on_button_clicked)
+        self.set_border_width(10)
+        self.backup_path = None
 
-        self.add(bax)
+        box.add(self.label)
+        box.add(self.backup_btn)
         self.show_all()
+
+    def on_button_clicked(self, widget):
+        choose_file = FileDialog(self)
+        file_response = choose_file.run()
+        if file_response == Gtk.ResponseType.OK:
+            self.backup_path = choose_file.get_filename()
+            self.destroy()
+        choose_file.destroy()
+
+    def get_path(self):
+        return self.backup_path
 

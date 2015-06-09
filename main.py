@@ -5,6 +5,7 @@ import settings_dialog
 import themer
 import make
 
+
 class Main(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="Main")
@@ -77,6 +78,7 @@ class Main(Gtk.Window):
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
             self.config = themer.Config(dialog.get_filename())
+            # self.config.make_default()
 
         else:
             self.config = ""  # self.config needs to be set to something other than None else infinite loop
@@ -103,8 +105,13 @@ class Main(Gtk.Window):
 
     def backup_dialog(self, widget):
         backup_prompt = make.BackupDialog(self)
-        responce = backup_prompt.run()
-        backup_prompt.destroy()
+        response = backup_prompt.run()
+        if response == Gtk.ResponseType.CANCEL:
+            backup_prompt.destroy()
+        else:
+            backup_prompt.destroy()
+            self.config = themer.Config(backup_prompt.get_path())
+            self.save_file()
 
     @staticmethod
     def run_update(widget):

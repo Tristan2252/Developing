@@ -95,7 +95,9 @@ class Config(object):
         something goes wrong
         :return: None
         """
-        if not ospath.isfile("{}.DEFAULT".format(self._path)):
+        if self._path.endswith(".DEFAULT"):  # if user restores from .DEFAULT a backup should not be made
+            pass
+        elif not ospath.isfile("{}.DEFAULT".format(self._path)):
             print("Default file made") if DEBUG else None
             text = self._config
             with open("{}.DEFAULT".format(self._path), "w") as new_file:

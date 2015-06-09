@@ -67,6 +67,12 @@ class Menu(Gtk.MenuItem):
         self.menu = Gtk.Menu()
 
     def add_item(self, label, connection):
+        """
+        adds item to menu and set label and connection
+        :param label: str # name of the item
+        :param connection: def # function to connect item to
+        :return: None
+        """
         self.menu_item.set_submenu(self.menu)
         menu_item = Gtk.MenuItem(label=label)
         menu_item.connect("activate", connection)
@@ -117,6 +123,12 @@ class BackupDialog(Gtk.Dialog):
         self.show_all()
 
     def on_button_clicked(self, widget):
+        """
+        prompts user with file chooser dialog when select
+        backup button is selected.
+        :param widget: function to connect to
+        :return: None
+        """
         choose_file = FileDialog(self)
         file_response = choose_file.run()
         if file_response == Gtk.ResponseType.OK:
@@ -125,5 +137,9 @@ class BackupDialog(Gtk.Dialog):
         choose_file.destroy()
 
     def get_path(self):
+        """
+        returns path of backup file
+        :return: str # backup file path
+        """
         return self.backup_path
 

@@ -1,7 +1,7 @@
 import subprocess
 import os.path as ospath
 
-DEBUG = True  # testing flag for development, Ex:activates print lines
+DEBUG = False  # testing flag for development, Ex:activates print lines
 
 
 class Config(object):

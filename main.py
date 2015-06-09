@@ -17,7 +17,7 @@ class Main(Gtk.Window):
         self.table.set_row_spacings(5)
         self.config = None
 
-        if themer.DEBUG:
+        if themer.DEBUG:  # for convenience when in debug mode
             self.config = themer.Config("gnome-shell.css")
 
         self.menu_bar = Gtk.MenuBar()
@@ -51,6 +51,13 @@ class Main(Gtk.Window):
         self.show_all()
 
     def on_button_clicked(self, widget, methods, settings):
+        """
+        creates setting dialog to present settings to user
+        :param widget: widget connection
+        :param methods: [] # list of methods to add to settings dialog
+        :param settings: [] # list of setting to add to  settings dialog
+        :return: None
+        """
         if self.config is None:
             self.get_file()
             self.on_button_clicked(widget, methods, settings)
@@ -67,6 +74,11 @@ class Main(Gtk.Window):
             settings.destroy()
 
     def get_file(self):
+        """
+        presents user with file error if setting button is clicked
+        with no config loaded.
+        :return: None
+        """
         file_error = make.GenericError(self, "You need to open a gnome-shell CSS file to edit first")
         error_response = file_error.run()
         if error_response == Gtk.ResponseType.OK:
@@ -74,6 +86,12 @@ class Main(Gtk.Window):
         file_error.destroy()
 
     def open_file(self, widget=None):  # widget = to None by default so that it can be called individually
+        """
+        presents user with file selection dialog and creates
+        themer.Config() object
+        :param widget: widget connection
+        :return: None
+        """
         dialog = make.FileDialog(self)
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
@@ -85,10 +103,16 @@ class Main(Gtk.Window):
         dialog.destroy()
 
     def save_file(self, widget=None):
+        """
+        presents user with a save dialog and error dialogs
+        if needed
+        :param widget: widget connection
+        :return: None
+        """
         save = make.SaveDialog(self)
         response = save.run()
         if response == Gtk.ResponseType.YES:
-            try:
+            try:  # checks if config is writable
                 self.config.write_config()
             except AttributeError:
                 save.destroy()
@@ -99,11 +123,21 @@ class Main(Gtk.Window):
         save.destroy()
 
     def run_about(self, widget):
+        """
+        runs about dialog that presents user the about page
+        :param widget: widget connection
+        :return: None
+        """
         about_dialog = make.AboutDialog(self)
         about_dialog.run()
         about_dialog.destroy()
 
     def backup_dialog(self, widget):
+        """
+        runs backup dialog for user to select a backup
+        :param widget: widget connection
+        :return: None
+        """
         backup_prompt = make.BackupDialog(self)
         response = backup_prompt.run()
         if response == Gtk.ResponseType.CANCEL:
@@ -112,14 +146,26 @@ class Main(Gtk.Window):
             backup_prompt.destroy()
             self.config = themer.Config(backup_prompt.get_path())
             self.save_file()
+            self.config = None
 
     @staticmethod
     def run_update(widget):
+        """
+        Runs update (github pull) cmd
+        :param widget: widget connection
+        :return: None
+        """
         themer.update()
 
     def exit(self, widget):
+        """
+        runs save function and exits application
+        :param widget: widget connection
+        :return: None
+        """
         self.save_file()
         Gtk.main_quit()
+
 
 if __name__ == '__main__':
     win = Main()

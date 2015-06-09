@@ -55,6 +55,13 @@ class SettingsDialog(Gtk.Dialog):
         self.show_all()
 
     def on_method_checked(self, widget, method):
+        """
+        adds method name to the lists of methods to be changed,
+        if the method is already in the list it is removed.
+        :param widget: widget connection
+        :param method: method to add or remove
+        :return: None
+        """
         if method in self.method_lst:
             self.method_lst.remove(method)
         else:
@@ -63,6 +70,13 @@ class SettingsDialog(Gtk.Dialog):
         print(self.method_lst) if themer.DEBUG else None
 
     def on_setting_clicked(self, widget, setting):
+        """
+        adds setting to the list of settings to be changed,
+        if the setting is already in the list it is removed
+        :param widget: widget connection
+        :param setting: setting to add or remove
+        :return: None
+        """
         if setting in self.setting_lst:
             self.setting_lst.remove(setting)
         else:
@@ -71,6 +85,13 @@ class SettingsDialog(Gtk.Dialog):
         print(self.setting_lst) if themer.DEBUG else None
 
     def on_button_clicked(self, widget, button):
+        """
+        color button connection that sets gets the selected value
+        and calls the change setting method to commit changes.
+        :param widget: widget connection
+        :param button: button to get value from
+        :return: None
+        """
         color = themer.HexColor(button.get_rgba())
         self.hex_color = color.convert()
         for method in self.method_lst:

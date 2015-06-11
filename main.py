@@ -44,7 +44,7 @@ class Main(Gtk.Window):
         self.button_settings = make.CustomButton(self, "Button", self.button_img)
         self.custom_settings = make.CustomButton(self, "Custom")
 
-        self.table.attach(self.menu_bar, 0, 3, 0, 1, xpadding=2)
+        self.table.attach(self.menu_bar, 0, 3, 0, 1, xpadding=2, yoptions=Gtk.AttachOptions.SHRINK)
         self.table.attach(self.panel_settings, 1, 2, 1, 2)
         self.table.attach(self.popup_settings, 1, 2, 2, 3)
         self.table.attach(self.button_settings, 1, 2, 3, 4)

@@ -1,7 +1,7 @@
 import subprocess
 import os.path as ospath
 
-DEBUG = True  # testing flag for development, Ex:activates print lines
+DEBUG = False  # testing flag for development, Ex:activates print lines
 
 
 class Config(object):
@@ -58,12 +58,17 @@ class Config(object):
 
     def write_config(self):
         """
-        wires self._config to new file
+        wires self._config to new file and accounts for default
+        file if self._path has it.
         :return: None
         """
-        print("\n[FILE SAVED]") if DEBUG else None
+        if self._path.endswith(".DEFAULT"):
+            self._path = self._path[:-8]  # sets path to minos .DEFAULT so that it doesnt save to itself
+
+        print(self._path) if DEBUG else None
         with open(self._path, 'w') as f:
             f.writelines(self._config)
+            print("\n[FILE SAVED]") if DEBUG else None
 
     def test_method(self, method, setting):
         """
@@ -97,6 +102,7 @@ class Config(object):
         """
         if self._path.endswith(".DEFAULT"):  # if user restores from .DEFAULT a backup should not be made
             pass
+            print(self._path) if DEBUG else None
         elif not ospath.isfile("{}.DEFAULT".format(self._path)):
             print("Default file made") if DEBUG else None
             text = self._config
@@ -146,6 +152,7 @@ class About(object):
 
 CUSTOM_METHODS = []
 CUSTOM_SETTINGS = []
+
 
 def get(item):
     """

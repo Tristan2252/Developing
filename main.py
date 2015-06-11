@@ -37,10 +37,11 @@ class Main(Gtk.Window):
 
         self.panel_img = make.Image("icons/panel.png")
         self.popup_img = make.Image("icons/popup.png")
+        self.button_img = make.Image("icons/button.png")
 
         self.panel_settings = make.CustomButton(self, "Panel", self.panel_img)
         self.popup_settings = make.CustomButton(self, "Popup", self.popup_img)
-        self.button_settings = make.CustomButton(self, "Button")
+        self.button_settings = make.CustomButton(self, "Button", self.button_img)
         self.custom_settings = make.CustomButton(self, "Custom")
 
         self.table.attach(self.menu_bar, 0, 3, 0, 1, xpadding=2)

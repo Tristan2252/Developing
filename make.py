@@ -170,3 +170,47 @@ class EntryDialog(Gtk.Dialog):
         box.add(self.table)
         self.show_all()
 
+
+class SettingsBox(Gtk.Table):
+    def __init__(self, method, settings):
+        super(SettingsBox, self).__init__(5, 5)
+
+        # self.table = Gtk.Table(5, 5)
+        self.setting_lst = []
+        self.settings_dict = {}
+        self.color_btns = {}
+        self.hex_color = None
+        print(settings)
+
+        self.on_clicked = lambda widget, x: self.setting_lst.append(x)\
+            if x not in self.setting_lst else self.setting_lst.remove(x)
+
+        self.attach(Gtk.Label(method), 1, 3, 1, 2)
+        self.color_btn = Gtk.ColorButton()
+        self.color_btn.connect("color-set", self.on_button_clicked, self.color_btn)
+        self.attach(self.color_btn, 1, 2, 3, 4)
+
+        for i, setting in enumerate(settings):
+            self.settings_dict[setting] = Gtk.CheckButton(setting)
+            self.settings_dict[setting].connect("clicked", self.on_clicked, setting)
+            self.attach(self.settings_dict[setting], i+1, i+2, 2, 3)
+
+    def on_button_clicked(self, widget, button):
+        """
+        color button connection that sets gets the selected value
+        and calls the change setting method to commit changes.
+        :param widget: widget connection
+        :param button: button to get value from
+        :return: None
+        """
+        color = themer.HexColor(button.get_rgba())
+        self.hex_color = color.convert()
+        for method in self.method_lst:
+            for setting in self.setting_lst:
+                if self.parent.config.test_method(method, setting):
+                    self.parent.config.change_setting(method, setting, self.hex_color)
+                else:
+                    error = SettingError(self, setting, method)
+                    error.run()
+                    error.destroy()
+

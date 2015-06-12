@@ -57,7 +57,7 @@ class CustomButton(Gtk.Button):
         creates setting dialog to present settings to user
         :param widget: widget connection
         :param parent: program parent
-        :param str # string identifying the settings for the dialog
+        :param settings_name: str # string identifying the settings for the dialog
         :return: None
         """
         if parent.config is None:
@@ -282,7 +282,6 @@ class SettingsTable(Gtk.Table):
         color button connection that sets gets the selected value
         and calls the change setting method to commit changes.
         :param widget: widget connection
-        :param button: button to get value from
         :param parent: parent of dialog, needed to call config.change_setting
         :return: None
         """

@@ -32,7 +32,7 @@ class Config(object):
         :param method: str # the CSS method to be looked at. Ex. #panel {}
         :param setting: str # the setting with in the CSS method to be changed
         :param value: str # string representing value to set the setting to
-        :return: None
+        :return: Boolean # if the setting was found or not
         """
         print("\n{}".format(method)) if DEBUG else None
         method += " {\n"
@@ -46,7 +46,6 @@ class Config(object):
                 if "}" in line:
                     print("{} NOT FOUND".format(setting)) if DEBUG else None
                     self._editing = False
-                    return False
                 elif setting == line[:len(setting)]:
                     print("\nPrevious {}Changed {} {}"
                           "".format(self._config[self._setting_index], setting, value)) if DEBUG else None
@@ -55,18 +54,15 @@ class Config(object):
                     else:
                         self._config[self._setting_index] = "{} {}\n".format(setting, value)
                     self._editing = False
-                    return True
             self._setting_index += 1
 
     def undo_setting(self, method, setting):
         """
-        method iterates through each line in the config file and
-        looks for the CSS method to be changed. Once found, editing
-        mode is turned on. If in editing mode and the line is = to
-        the setting to be changed then the index of the the old config file is loaded to it.
+        uses self.temp to change setting back its state before the program was
+        ran. This is done by setting the index of the config file equal
+        to the index of the temp file made at the launch of the program.
         :param method: str # the CSS method to be looked at. Ex. #panel {}
         :param setting: str # the setting with in the CSS method to be changed
-        :return: None
         """
         print("\n{}".format(method)) if DEBUG else None
         method += " {\n"
@@ -79,7 +75,6 @@ class Config(object):
                 if "}" in line:
                     print("{} NOT FOUND".format(setting)) if DEBUG else None
                     self._editing = False
-                    return False
                 elif setting == line[:len(setting)]:
                     print("\nPrevious {}Changed back to {}"
                           "".format(self._config[self._setting_index],
@@ -88,7 +83,6 @@ class Config(object):
                     # set index of config = to index of default file
                     self._config[self._setting_index] = self._temp[self._setting_index]
                     self._editing = False
-                    return True
             self._setting_index += 1
 
     def write_config(self):
@@ -108,7 +102,8 @@ class Config(object):
     def test_method(self, method, setting):
         """
         method tests if the specified method exists
-        within the config file.
+        within the config file. NOTE: this is separate from change_setting
+        so that the method can be tested without being changed.
         :param method: str # method to find
         :return: bool # if it is found or not
         """

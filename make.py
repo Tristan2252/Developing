@@ -289,7 +289,7 @@ class SettingsTable(Gtk.Table):
         color = themer.HexColor(self.color_btn.get_rgba())
         hex_color = color.convert()  # converts color to hex format
         for setting in self.setting_lst:
-            if parent.config.test_method(self._method, setting):
+            if parent.config.test_method(self._method, setting):  # testing if method exists
                 parent.config.change_setting(self._method, setting, hex_color)
             else:
                 error = SettingError(self, setting, self._method)

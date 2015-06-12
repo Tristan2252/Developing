@@ -7,17 +7,22 @@ DEBUG = True  # testing flag for development, Ex:activates print lines
 class Config(object):
     def __init__(self, path):
         self._path = path
-        self._config = self.open_file()
+        self._config = self.open_file(self._path)
         self._editing = False
         self._setting_index = 0
-        self.make_default()
 
-    def open_file(self):
+        # self._default needs to be initialized after self.make_default
+        # else default file doesnt exist
+        self.make_default()
+        self._default = self.open_file("{}.DEFAULT".format(self._path))
+
+    @staticmethod
+    def open_file(path):
         """
         opens file at self.path and returns contents
         :return: [] # contents of the file
         """
-        with open(self._path) as f:
+        with open(path) as f:
             return f.readlines()
 
     def change_setting(self, method, setting, value):
@@ -52,6 +57,39 @@ class Config(object):
                         self._config[self._setting_index] = "{} 1px solid {}\n".format(setting, value)
                     else:
                         self._config[self._setting_index] = "{} {}\n".format(setting, value)
+                    self._editing = False
+                    return True
+            self._setting_index += 1
+
+    def undo_setting(self, method, setting):
+        """
+        method iterates through each line in the config file and
+        looks for the CSS method to be changed. Once found, editing
+        mode is turned on. If in editing mode and the line is = to
+        the setting to be changed then the index of the the old config file is loaded to it.
+        :param method: str # the CSS method to be looked at. Ex. #panel {}
+        :param setting: str # the setting with in the CSS method to be changed
+        :return: None
+        """
+        print("\n{}".format(method)) if DEBUG else None
+        method += " {\n"
+        setting = "    {}:".format(setting)
+        for line in self._config:
+            if line == method:
+                self._editing = True
+                self._setting_index = self._config.index(method)
+            if self._editing:
+                if "}" in line:
+                    print("{} NOT FOUND".format(setting)) if DEBUG else None
+                    self._editing = False
+                    return False
+                elif setting == line[:len(setting)]:
+                    print("\nPrevious {}Changed back to {}"
+                          "".format(self._config[self._setting_index],
+                                    self._default[self._setting_index])) if DEBUG else None
+
+                    # set index of config = to index of default file
+                    self._config[self._setting_index] = self._default[self._setting_index]
                     self._editing = False
                     return True
             self._setting_index += 1

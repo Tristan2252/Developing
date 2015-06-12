@@ -53,27 +53,6 @@ class Main(Gtk.Window):
         self.add(self.box)
         self.show_all()
 
-    def on_button_clicked(self, widget, settings):
-        """
-        creates setting dialog to present settings to user
-        :param widget: widget connection
-        :param settings: [] # list of setting to add to  settings dialog
-        :return: None
-        """
-        if self.config is None:
-            self.get_file()
-            self.on_button_clicked(widget, settings)
-
-        elif self.config == "":
-            self.config = None  # set back to None so that user can be prompted for file again
-        else:
-            settings_dialog = make.SettingsDialog(self, settings)
-            response = settings_dialog.run()
-
-            if response == Gtk.ResponseType.OK:
-                settings_dialog.destroy()
-            settings_dialog.destroy()
-
     def get_file(self):
         """
         presents user with file error if setting button is clicked

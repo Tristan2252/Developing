@@ -628,11 +628,11 @@ StScrollBar StButton#hhandle:active {
 /* Panel */
 
 #panel {
-    color: #73d216;
+    color: #edd400;
     background-image: none;
     background-gradient-direction: none;
     /*background-color: #31363d;*/
-    background-color: #73d216;
+    background-color: #edd400;
     font-weight: bold;
     height: 32px;
     transition-duration: 100ms;

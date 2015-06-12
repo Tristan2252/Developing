@@ -1,5 +1,5 @@
 import subprocess
-import os.path as ospath
+import os.path as os
 
 DEBUG = True  # testing flag for development, Ex:activates print lines
 
@@ -8,13 +8,10 @@ class Config(object):
     def __init__(self, path):
         self._path = path
         self._config = self.open_file(self._path)
+        self._temp = self.open_file(self._path)  # temp file to refer back to for un-dos
         self._editing = False
         self._setting_index = 0
-
-        # self._default needs to be initialized after self.make_default
-        # else default file doesnt exist
         self.make_default()
-        self._default = self.open_file("{}.DEFAULT".format(self._path))
 
     @staticmethod
     def open_file(path):
@@ -86,10 +83,10 @@ class Config(object):
                 elif setting == line[:len(setting)]:
                     print("\nPrevious {}Changed back to {}"
                           "".format(self._config[self._setting_index],
-                                    self._default[self._setting_index])) if DEBUG else None
+                                    self._temp[self._setting_index])) if DEBUG else None
 
                     # set index of config = to index of default file
-                    self._config[self._setting_index] = self._default[self._setting_index]
+                    self._config[self._setting_index] = self._temp[self._setting_index]
                     self._editing = False
                     return True
             self._setting_index += 1
@@ -141,7 +138,7 @@ class Config(object):
         if self._path.endswith(".DEFAULT"):  # if user restores from .DEFAULT a backup should not be made
             pass
             print(self._path) if DEBUG else None
-        elif not ospath.isfile("{}.DEFAULT".format(self._path)):
+        elif not os.isfile("{}.DEFAULT".format(self._path)):
             print("Default file made") if DEBUG else None
             text = self._config
             with open("{}.DEFAULT".format(self._path), "w") as new_file:

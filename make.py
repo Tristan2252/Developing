@@ -275,7 +275,7 @@ class SettingsTable(Gtk.Table):
             else:
                 self.on_button_clicked(None, self.main_parent)
 
-        print(self.setting_lst) if themer.DEBUG else None
+        print("Selected: {}".format(self.setting_lst)) if themer.DEBUG else None
 
     def on_button_clicked(self, widget, parent):
         """

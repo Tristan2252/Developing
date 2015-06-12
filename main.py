@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from gi.repository import Gtk
-import settings_dialog
 import themer
 import make
 
@@ -54,28 +53,26 @@ class Main(Gtk.Window):
         self.add(self.box)
         self.show_all()
 
-    def on_button_clicked(self, widget, methods, settings):
+    def on_button_clicked(self, widget, settings):
         """
         creates setting dialog to present settings to user
         :param widget: widget connection
-        :param methods: [] # list of methods to add to settings dialog
         :param settings: [] # list of setting to add to  settings dialog
         :return: None
         """
         if self.config is None:
             self.get_file()
-            self.on_button_clicked(widget, methods, settings)
+            self.on_button_clicked(widget, settings)
 
         elif self.config == "":
             self.config = None  # set back to None so that user can be prompted for file again
         else:
-            settings = settings_dialog.SettingsDialog(self, methods, settings)
-
-            response = settings.run()
+            settings_dialog = make.SettingsDialog(self, settings)
+            response = settings_dialog.run()
 
             if response == Gtk.ResponseType.OK:
-                settings.destroy()
-            settings.destroy()
+                settings_dialog.destroy()
+            settings_dialog.destroy()
 
     def get_file(self):
         """
@@ -163,12 +160,15 @@ class Main(Gtk.Window):
         if response == Gtk.ResponseType.OK:
 
             methods = custom_dialog.methods_entry.get_text()
-            themer.CUSTOM_METHODS += methods.split(";") if methods\
-                else themer.CUSTOM_METHODS  # prevents check boxes from appearing in settings
-
             settings = custom_dialog.settings_entry.get_text()
-            themer.CUSTOM_SETTINGS += settings.split(";") if methods\
-                else themer.CUSTOM_SETTINGS
+
+            # makes lists of string passed through it
+            do_split = lambda string: string.split("; ") if "; " in string else string.split(";")
+
+            for method in do_split(methods):
+                themer.CUSTOM_SETTINGS[method] = do_split(settings)
+
+            print(themer.CUSTOM_SETTINGS) if themer.DEBUG else None
 
         custom_dialog.destroy()
 

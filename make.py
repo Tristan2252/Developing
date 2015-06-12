@@ -44,14 +44,35 @@ class CustomButton(Gtk.Button):
     def __init__(self, parent, name, icon_image=None):
         super(CustomButton, self).__init__("  {} Settings".format(name))  # Set base class
 
+        # checking for icon if one is set
         if icon_image is not None:
             self.set_image(icon_image)
             self.set_image_position(Gtk.PositionType.LEFT)
 
         self.set_relief(Gtk.ReliefStyle.NONE)
-        self.connect("clicked", parent.on_button_clicked,
-                     themer.get("{} methods".format(name)),
-                     themer.get("{} settings".format(name)))
+        self.connect("clicked", self.on_button_clicked, parent, name)
+
+    def on_button_clicked(self, widget, parent, settings):
+        """
+        creates setting dialog to present settings to user
+        :param widget: widget connection
+        :param parent: program parent
+        :param settings: [] # list of setting to add to  settings dialog
+        :return: None
+        """
+        if parent.config is None:
+            parent.get_file()
+            self.on_button_clicked(widget, parent, settings)
+
+        elif parent.config == "":
+            parent.config = None  # set back to None so that user can be prompted for file again
+        else:
+            settings_dialog = SettingsDialog(parent, settings)
+            response = settings_dialog.run()
+
+            if response == Gtk.ResponseType.OK:
+                settings_dialog.destroy()
+            settings_dialog.destroy()
 
 
 class Image(Gtk.Image):
@@ -171,46 +192,98 @@ class EntryDialog(Gtk.Dialog):
         self.show_all()
 
 
-class SettingsBox(Gtk.Table):
-    def __init__(self, method, settings):
-        super(SettingsBox, self).__init__(5, 5)
+class SettingsDialog(Gtk.Dialog):
+    def __init__(self, parent, settings):
+        Gtk.Dialog.__init__(self, "Dialog", parent, 0,
+                            (Gtk.STOCK_OK, Gtk.ResponseType.OK))
 
-        # self.table = Gtk.Table(5, 5)
+        box = self.get_content_area()
+        self.table = Gtk.Table(8, 5)
+
+        # setting up scroll window
+        scroll_box = Gtk.ScrolledWindow()
+        scroll_box.set_min_content_height(600)
+        scroll_box.set_min_content_width(600)
+
+        self.set_border_width(5)
+        self.panel = themer.get(settings)  # getting settings
+
+        # for every method a settings table is made
+        for i, method in enumerate(sorted(self.panel)):
+            self.table.attach(SettingsTable(method, self.panel[method], parent), 0, 5, i, i+1)
+
+        scroll_box.add(self.table)
+        box.add(scroll_box)
+        self.show_all()
+
+
+class SettingsTable(Gtk.Table):
+    def __init__(self, method, settings, main_parent):
+        super(SettingsTable, self).__init__(4, 3, True)
+
+        self._method = method
         self.setting_lst = []
         self.settings_dict = {}
-        self.color_btns = {}
-        self.hex_color = None
-        print(settings)
+        self.color_btn_dict = {}
 
-        self.on_clicked = lambda widget, x: self.setting_lst.append(x)\
-            if x not in self.setting_lst else self.setting_lst.remove(x)
+        # Method label set in bold text
+        self.method_name = Gtk.Label()
+        self.method_name.set_markup("<b>{}</b>".format(method))
+        self.attach(self.method_name, 0, 1, 1, 2)
 
-        self.attach(Gtk.Label(method), 1, 3, 1, 2)
+        # Setts up color button for the method
         self.color_btn = Gtk.ColorButton()
-        self.color_btn.connect("color-set", self.on_button_clicked, self.color_btn)
-        self.attach(self.color_btn, 1, 2, 3, 4)
+        self.color_btn.connect("color-set", self.on_button_clicked, self.color_btn, main_parent)
 
-        for i, setting in enumerate(settings):
+        # makes check boxes for each setting
+        if isinstance(settings, str):  # if setting is just one string it is just added
+            setting = settings
             self.settings_dict[setting] = Gtk.CheckButton(setting)
-            self.settings_dict[setting].connect("clicked", self.on_clicked, setting)
-            self.attach(self.settings_dict[setting], i+1, i+2, 2, 3)
+            self.settings_dict[setting].connect("clicked", self.on_setting_clicked, setting)
+            self.attach(self.settings_dict[setting], 0, 1, 2, 3)
+            self.attach(self.color_btn, 0, 1, 3, 4)
+        else:
+            for i, setting in enumerate(settings):
+                self.settings_dict[setting] = Gtk.CheckButton(setting)
+                self.settings_dict[setting].connect("clicked", self.on_setting_clicked, setting)
+                if i <= 2:  # prevents more than 3 settings per line
+                    self.attach(self.settings_dict[setting], i, i+1, 2, 3)
+                    # attaches color button to line below last setting
+                    self.attach(self.color_btn, 0, 1, 3, 4) if i+1 == len(settings) else None
+                else:
+                    self.attach(self.settings_dict[setting], i-3, i-2, 4, 5)
+                    self.attach(self.color_btn, 0, 1, 5, 6) if i+1 == len(settings) else None
 
-    def on_button_clicked(self, widget, button):
+    def on_setting_clicked(self, widget, setting):
+        """
+        adds setting to the list of settings to be changed,
+        if the setting is already in the list it is removed
+        :param widget: widget connection
+        :param setting: setting to add or remove
+        :return: None
+        """
+        if setting in self.setting_lst:
+            self.setting_lst.remove(setting)
+        else:
+            self.setting_lst.append(setting)
+
+        print(self.setting_lst) if themer.DEBUG else None
+
+    def on_button_clicked(self, widget, button, parent):
         """
         color button connection that sets gets the selected value
         and calls the change setting method to commit changes.
         :param widget: widget connection
         :param button: button to get value from
+        :param parent: parent of dialog, needed to call config.change_setting
         :return: None
         """
         color = themer.HexColor(button.get_rgba())
-        self.hex_color = color.convert()
-        for method in self.method_lst:
-            for setting in self.setting_lst:
-                if self.parent.config.test_method(method, setting):
-                    self.parent.config.change_setting(method, setting, self.hex_color)
-                else:
-                    error = SettingError(self, setting, method)
-                    error.run()
-                    error.destroy()
-
+        hex_color = color.convert()  # converts color to hex format
+        for setting in self.setting_lst:
+            if parent.config.test_method(self._method, setting):
+                parent.config.change_setting(self._method, setting, hex_color)
+            else:
+                error = SettingError(self, setting, self._method)
+                error.run()
+                error.destroy()

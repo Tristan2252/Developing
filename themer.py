@@ -1,7 +1,7 @@
 import subprocess
 import os.path as ospath
 
-DEBUG = False  # testing flag for development, Ex:activates print lines
+DEBUG = True  # testing flag for development, Ex:activates print lines
 
 
 class Config(object):
@@ -150,39 +150,38 @@ class About(object):
         return "".join(self.contents)
 
 
-CUSTOM_METHODS = []
-CUSTOM_SETTINGS = []
+CUSTOM_SETTINGS = {}
 
 
-def get(item):
+def get(item_settings):
     """
     returns requested settings or methods
-    :param item: str  # specifies what to return
-    :return: ()  # sorted tuple of request
+    :param item_settings: str  # specifies what to return
+    :return: {} # dictionary of methods and settings
     """
-    if item == "Panel methods":
-        panel_methods = ("#panel", "#panel:overview", ".panel-button:hover:overview", ".panel-button:focus")
-        return sorted(panel_methods)  # sorted so that placement doesnt change in GUI
-    if item == "Panel settings":
-        panel_settings = ("background-color", "border-color")
-        return sorted(panel_settings)
-    if item == "Popup methods":
-        popup_methods = (".candidate-popup-boxpointer", ".popup-menu-item:active", ".popup-sub-menu",
-                         ".popup-submenu-menu-item:open")
-        return sorted(popup_methods)
-    if item == "Popup settings":
-        popup_settings = ("background-color", "-arrow-background-color", "-arrow-border-color")
-        return sorted(popup_settings)
-    if item == "Button methods":
-        button_methods = (".app-view-control", ".modal-dialog-button:hover", ".app-view-control:focus",
-                          ".app-view-control:focus:hover", ".app-view-control:focus:active")
-        return sorted(button_methods)
-    if item == "Button settings":
-        button_settings = ("border", "background-color", "color")
-        return sorted(button_settings)
-    if item == "Custom methods":
-        return CUSTOM_METHODS
-    if item == "Custom settings":
+    if item_settings == "Panel":
+        return {"#panel": ("color", "background-color"),
+                "#panel:overview": ("border-color", "background-color"),
+                ".panel-button:hover:overview": ("border-color", "background-color"),
+                ".panel-button:focus": ("color", "background-color", "border-color")}
+
+    if item_settings == "Popup":
+        return {".popup-menu-item:active": ("color", "background-color", "border-color"),
+                ".popup-sub-menu": "background-color",
+                ".popup-submenu-menu-item:open": "background-color",
+                ".candidate-popup-boxpointer": ("-arrow-background-color", "color", "-arrow-border-color",
+                                                "background-color", "border-color")}
+
+    if item_settings == "Button":
+        return {".app-view-control": ("color", "background-color", "border", ),
+                ".modal-dialog-button:hover": ("color", "background-color", "border"),
+                ".app-view-control:focus": ("color", "background-color", "border"),
+                ".app-view-control:focus:hover": ("color", "background-color", "border"),
+                ".app-view-control:focus:active": ("color", "background-color", "border")}
+
+    if item_settings == "Custom":
+        if "" in CUSTOM_SETTINGS:  # removes blank key if it exists
+            del CUSTOM_SETTINGS[""]
         return CUSTOM_SETTINGS
 
 

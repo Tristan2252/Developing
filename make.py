@@ -235,7 +235,7 @@ class SettingsTable(Gtk.Table):
 
         # Setts up color button for the method
         self.color_btn = Gtk.ColorButton()
-        self.color_btn.connect("color-set", self.on_button_clicked, main_parent)
+        self.color_btn.connect("color-set", self.commit_setting, main_parent)
 
         # makes check boxes for each setting
         if isinstance(settings, str):  # if setting is just one string it is just added
@@ -265,19 +265,23 @@ class SettingsTable(Gtk.Table):
         :return: None
         """
         no_color = Gdk.RGBA(red=0.000000, green=0.000000, blue=0.000000, alpha=1.000000)
+
         if setting in self.setting_lst:
             self.setting_lst.remove(setting)
-            self.main_parent.config.undo_setting(self._method, setting)
+            if self.color_btn.get_rgba() == no_color:
+                pass
+            else:
+                self.main_parent.config.undo_setting(self._method, setting)
         else:
             self.setting_lst.append(setting)
             if self.color_btn.get_rgba() == no_color:
                 pass
             else:
-                self.on_button_clicked(None, self.main_parent)
+                self.commit_setting(None, self.main_parent)
 
         print("Selected: {}".format(self.setting_lst)) if themer.DEBUG else None
 
-    def on_button_clicked(self, widget, parent):
+    def commit_setting(self, widget, parent):
         """
         color button connection that sets gets the selected value
         and calls the change setting method to commit changes.

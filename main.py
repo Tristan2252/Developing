@@ -10,7 +10,7 @@ class Main(Gtk.Window):
         Gtk.Window.__init__(self, title="Main")
 
         self.box = Gtk.Box()
-        self.set_default_size(300, 100)
+        self.set_default_size(300, 300)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.table = Gtk.Table(6, 5)
         self.table.set_row_spacings(5)

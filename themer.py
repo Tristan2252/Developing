@@ -1,7 +1,7 @@
 import subprocess
 import os.path as os
 
-DEBUG = True  # testing flag for development, Ex:activates print lines
+DEBUG = False  # testing flag for development, Ex:activates print lines
 
 
 class Config(object):
@@ -190,7 +190,7 @@ def get(item_settings):
     :return: {} # dictionary of methods and settings
     """
     if item_settings == "Panel":
-        return {"#panel": ("color", "background-color"),
+        return {"#panel": "background-color",
                 "#panel:overview": ("border-color", "background-color"),
                 ".panel-button:hover:overview": ("border-color", "background-color"),
                 ".panel-button:focus": ("color", "background-color", "border-color")}

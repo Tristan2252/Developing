@@ -49,7 +49,7 @@ class CustomButton(Gtk.Button):
             self.set_image(icon_image)
             self.set_image_position(Gtk.PositionType.LEFT)
 
-        self.set_relief(Gtk.ReliefStyle.NONE)
+        # self.set_relief(Gtk.ReliefStyle.NONE)
         self.connect("clicked", self.on_button_clicked, parent, name)
 
     def on_button_clicked(self, widget, parent, settings_name):

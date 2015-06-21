@@ -7,7 +7,7 @@ import make
 
 class Main(Gtk.Window):
     def __init__(self):
-        Gtk.Window.__init__(self, title="Main")
+        Gtk.Window.__init__(self, title="GCT")
 
         self.box = Gtk.Box()
         self.set_default_size(300, 300)
@@ -27,12 +27,15 @@ class Main(Gtk.Window):
         self.file_menu.add_item("Save", self.save_file)
         self.file_menu.add_item("Exit", self.exit)
 
+        self.backup = make.Menu("Backup", self.menu_bar)
+        self.backup.add_item("Restore Backup", self.backup_dialog)
+
         self.about = make.Menu("About", self.menu_bar)
         self.about.add_item("About", self.run_about)
         self.about.add_item("Update", self.run_update)
 
-        self.backup = make.Menu("Backup", self.menu_bar)
-        self.backup.add_item("Restore Backup", self.backup_dialog)
+        self.help = make.Menu("Help", self.menu_bar)
+        self.help.add_item("Help", self.help_window)
 
         self.panel_img = make.Image("icons/panel.png")
         self.popup_img = make.Image("icons/popup.png")
@@ -47,7 +50,11 @@ class Main(Gtk.Window):
         self.table.attach(self.panel_settings, 1, 2, 1, 2)
         self.table.attach(self.popup_settings, 1, 2, 2, 3)
         self.table.attach(self.button_settings, 1, 2, 3, 4)
-        self.table.attach(self.custom_settings, 3, 4, 1, 2)
+        self.table.attach(self.custom_settings, 1, 2, 4, 5)
+
+        self.table.set_col_spacing(3, 20)
+        self.help_box = make.TextBox("welcome")
+        self.table.attach(self.help_box, 4, 5, 1, 5)
 
         self.box.add(self.table)
         self.add(self.box)
@@ -151,15 +158,6 @@ class Main(Gtk.Window):
 
         custom_dialog.destroy()
 
-    @staticmethod
-    def run_update(widget):
-        """
-        Runs update (github pull) cmd
-        :param widget: widget connection
-        :return: None
-        """
-        themer.update()
-
     def exit(self, widget):
         """
         runs save function and exits application
@@ -168,6 +166,26 @@ class Main(Gtk.Window):
         """
         self.save_file()
         Gtk.main_quit()
+
+    def help_window(self, widget):
+        """
+        function creates and launched help window
+        :param widget: button connection
+        :return: None
+        """
+        pass
+        # help_win = make.HelpWindow()
+        # help_win.run()
+        # help_win.destroy()
+
+    @staticmethod
+    def run_update(widget):
+        """
+        Runs update (github pull) cmd
+        :param widget: widget connection
+        :return: None
+        """
+        themer.update()
 
 
 if __name__ == '__main__':

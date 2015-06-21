@@ -1,7 +1,7 @@
 import subprocess
 import os.path as os
 
-DEBUG = False  # testing flag for development, Ex:activates print lines
+DEBUG = True  # testing flag for development, Ex:activates print lines
 
 
 class Config(object):
@@ -158,28 +158,6 @@ class HexColor(object):
         return "#%02x%02x%02x" % (red, green, blue)
 
 
-class About(object):
-    def __init__(self):
-        self.about_location = "README.md"
-        self.contents = self.open_about()
-
-    def open_about(self):
-        """
-        opens README.md file and returns contents
-        :return: []  # lines in file
-        """
-        with open(self.about_location) as f:
-            return f.readlines()
-
-    def get_text(self):
-        """
-        joins list of README.md contents and returns
-        the string
-        :return: str  # joined contents of file
-        """
-        return "".join(self.contents)
-
-
 CUSTOM_SETTINGS = {}
 
 
@@ -213,6 +191,28 @@ def get(item_settings):
         if "" in CUSTOM_SETTINGS:  # removes blank key if it exists
             del CUSTOM_SETTINGS[""]
         return CUSTOM_SETTINGS
+
+
+class OpenText(object):
+    def __init__(self, file_location):
+        self.about_location = file_location
+        self.contents = self.open_about()
+
+    def open_about(self):
+        """
+        opens README.md file and returns contents
+        :return: []  # lines in file
+        """
+        with open(self.about_location) as f:
+            return f.readlines()
+
+    def get_text(self):
+        """
+        joins list of README.md contents and returns
+        the string
+        :return: str  # joined contents of file
+        """
+        return "".join(self.contents)
 
 
 def update():

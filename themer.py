@@ -224,3 +224,7 @@ def update():
         pass
     else:
         subprocess.call("git pull", shell=True)
+
+
+def call_help():
+    subprocess.call("python3 help_window.py", shell=True)

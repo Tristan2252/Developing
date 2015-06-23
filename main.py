@@ -8,6 +8,7 @@ import make
 class Main(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="GCT")
+        self.connect("destroy", lambda x:  Gtk.main_quit())
 
         self.box = Gtk.Box()
         self.set_default_size(300, 300)
@@ -167,16 +168,14 @@ class Main(Gtk.Window):
         self.save_file()
         Gtk.main_quit()
 
-    def help_window(self, widget):
+    @staticmethod
+    def help_window(widget):
         """
         function creates and launched help window
         :param widget: button connection
         :return: None
         """
-        pass
-        # help_win = make.HelpWindow()
-        # help_win.run()
-        # help_win.destroy()
+        make.HelpWindow()
 
     @staticmethod
     def run_update(widget):
@@ -190,6 +189,5 @@ class Main(Gtk.Window):
 
 if __name__ == '__main__':
     win = Main()
-    win.connect("delete-event", Gtk.main_quit)
-    win.show_all()
+    # win.show_all()
     Gtk.main()

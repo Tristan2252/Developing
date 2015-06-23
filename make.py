@@ -195,9 +195,9 @@ class SettingsDialog(Gtk.Dialog):
         box = self.get_content_area()
         self.table = Gtk.Table(8, 5)
 
-        # self.menu_bar = Gtk.MenuBar()
-        # self.help = Menu("Help", self.menu_bar)
-        # self.help.add_item("Help", help_window)
+        self.menu_bar = Gtk.MenuBar()
+        self.help = Menu("Help", self.menu_bar)
+        self.help.add_item("Help", parent.help_window)
 
         # setting up scroll window
         scroll_box = Gtk.ScrolledWindow()
@@ -212,7 +212,7 @@ class SettingsDialog(Gtk.Dialog):
             self.table.attach(SettingsTable(method, self.panel[method], parent), 0, 5, i, i+1)
 
         scroll_box.add(self.table)
-        # box.add(self.menu_bar)
+        box.add(self.menu_bar)
         box.add(scroll_box)
         self.show_all()
 
@@ -299,18 +299,21 @@ class SettingsTable(Gtk.Table):
                 error.run()
                 error.destroy()
 
+
 class TextBox(Gtk.ScrolledWindow):
     def __init__(self, text_file):
         super(TextBox, self).__init__()
-
         self.text = themer.OpenText(text_file)
         self.text_label = Gtk.Label(self.text.get_text())
         self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         self.add(self.text_label)
 
+
 class HelpWindow(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="Help")
+        self.connect("destroy", lambda x: self.hide)
         self.set_default_size(600, 600)  # set custom window size
         self.set_border_width(20)
         self.add(TextBox("help"))
+        self.show_all()

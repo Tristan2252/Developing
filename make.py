@@ -195,10 +195,6 @@ class SettingsDialog(Gtk.Dialog):
         box = self.get_content_area()
         self.table = Gtk.Table(8, 5)
 
-        self.menu_bar = Gtk.MenuBar()
-        self.help = Menu("Help", self.menu_bar)
-        self.help.add_item("Help", parent.help_window)
-
         # setting up scroll window
         scroll_box = Gtk.ScrolledWindow()
         scroll_box.set_min_content_height(600)
@@ -212,7 +208,6 @@ class SettingsDialog(Gtk.Dialog):
             self.table.attach(SettingsTable(method, self.panel[method], parent), 0, 5, i, i+1)
 
         scroll_box.add(self.table)
-        box.add(self.menu_bar)
         box.add(scroll_box)
         self.show_all()
 

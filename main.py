@@ -41,6 +41,10 @@ class Main(Gtk.Window):
         self.panel_img = make.Image("icons/panel.png")
         self.popup_img = make.Image("icons/popup.png")
         self.button_img = make.Image("icons/button.png")
+        # self.icon_img = make.Image("icons/settings_small.png")
+
+        # setting window icon
+        self.set_icon_from_file("icons/settings_small.png")
 
         self.panel_settings = make.CustomButton(self, "Panel", self.panel_img)
         self.popup_settings = make.CustomButton(self, "Popup", self.popup_img)

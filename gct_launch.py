@@ -1,5 +1,4 @@
 import subprocess
-import sys
 import os
 
 
@@ -8,7 +7,7 @@ def try_import(module):
         module
         return True
     except ImportError:
-        print("Import: {} UNSUCCESSFUL!!".format(module))
+        print("\nImport: {} UNSUCCESSFUL!!".format(module))
         return False
 
 
@@ -19,7 +18,7 @@ def fix_gtk_import():
     :return: None
     """
     while True:
-        attempt_install = input("Would you like to attempt to install PyGtk? (y/n) ")
+        attempt_install = input("\nWould you like to attempt to install PyGtk? (y/n) ")
         if attempt_install == "y":
             subprocess.call("sudo apt-get install python3-gi", shell=True)
             break
@@ -35,27 +34,9 @@ def check_files():
 
     for i in program_files:
         if not os.path.isfile(i):
-            fix_missing(i)
+            print("\n{} system file is not found, re-clone for repo and try again\n".format(i))
+            return False
     return True
-
-
-def fix_missing(missing_file):
-    launch_file = "gct_launch.py"
-    directory = os.path.realpath(launch_file)
-
-    while True:
-        fix = input("Program files are missing would you like to attempt a repair? (y/n) ")
-        if fix == "y":
-            # print("{}".format(directory[:-len(launch_file)]))
-            subprocess.call("git pull", shell=True)
-                            # "{}".format(directory[:-len(launch_file)], missing_file), shell=True)
-            os.execl(sys.executable, *([sys.executable]+sys.argv))
-            break
-        elif fix == "n":
-            break
-        else:
-            print("Invalid input, please use (y/n)")
-
 
 if __name__ == '__main__':
     if not try_import("from gi.repository import Gtk"):

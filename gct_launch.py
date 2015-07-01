@@ -1,4 +1,5 @@
 import subprocess
+import sys
 import os
 
 
@@ -31,20 +32,29 @@ def check_files():
     program_files = ("themer.py", "main.py", "make.py", "help", "welcome",
                      "README.md", "icons/button.png", "icons/popup.png",
                      "icons/panel.png")
-    
+
     for i in program_files:
-        if os.path.isfile(i):
-            pass
-        else:
-            return False
+        if not os.path.isfile(i):
+            fix_missing(i)
     return True
 
 
-def fix_missing():
+def fix_missing(missing_file):
     launch_file = "gct_launch.py"
     directory = os.path.realpath(launch_file)
-    subprocess.call("git clone https://github.com/Tristan2252/Developing"
-                    " {}".format(directory[-len(launch_file)]), shell=True)
+
+    while True:
+        fix = input("Program files are missing would you like to attempt a repair? (y/n) ")
+        if fix == "y":
+            # print("{}".format(directory[:-len(launch_file)]))
+            subprocess.call("git pull", shell=True)
+                            # "{}".format(directory[:-len(launch_file)], missing_file), shell=True)
+            os.execl(sys.executable, *([sys.executable]+sys.argv))
+            break
+        elif fix == "n":
+            break
+        else:
+            print("Invalid input, please use (y/n)")
 
 
 if __name__ == '__main__':

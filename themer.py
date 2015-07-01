@@ -1,7 +1,8 @@
 import subprocess
 import os.path as os
 
-DEBUG = True  # testing flag for development, Ex:activates print lines
+DEBUG = False  # testing flag for development, Ex:activates print lines
+VERSION = "1.0"
 
 
 class Config(object):
@@ -226,5 +227,5 @@ def update():
         subprocess.call("git pull", shell=True)
 
 
-def call_help():
-    subprocess.call("python3 help_window.py", shell=True)
+if __name__ == '__main__':
+    pass

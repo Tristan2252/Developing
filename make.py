@@ -312,3 +312,7 @@ class HelpWindow(Gtk.Window):
         self.set_border_width(20)
         self.add(TextBox("help"))
         self.show_all()
+
+if __name__ == '__main__':
+    pass
+

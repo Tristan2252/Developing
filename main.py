@@ -7,8 +7,8 @@ import make
 
 class Main(Gtk.Window):
     def __init__(self):
-        Gtk.Window.__init__(self, title="GCT")
-        self.connect("destroy", lambda x:  Gtk.main_quit())
+        Gtk.Window.__init__(self, title="GCT {}".format(themer.VERSION))
+        self.connect("delete-event", self.exit)
 
         self.box = Gtk.Box()
         self.set_default_size(300, 300)
@@ -41,7 +41,6 @@ class Main(Gtk.Window):
         self.panel_img = make.Image("icons/panel.png")
         self.popup_img = make.Image("icons/popup.png")
         self.button_img = make.Image("icons/button.png")
-        # self.icon_img = make.Image("icons/settings_small.png")
 
         # setting window icon
         self.set_icon_from_file("icons/settings_small.png")
@@ -113,6 +112,7 @@ class Main(Gtk.Window):
                 save_error.run()
                 save_error.destroy()
         save.destroy()
+        return True
 
     def run_about(self, widget):
         """
@@ -163,13 +163,15 @@ class Main(Gtk.Window):
 
         custom_dialog.destroy()
 
-    def exit(self, widget):
+    def exit(self, widget, x=None):
         """
         runs save function and exits application
+        :param x: connect("delete-event") passes 3 parameters
         :param widget: widget connection
         :return: None
         """
-        self.save_file()
+        if self.config:  # testing if there is a file to be saved
+            self.save_file()
         Gtk.main_quit()
 
     @staticmethod
@@ -191,7 +193,9 @@ class Main(Gtk.Window):
         themer.update()
 
 
-if __name__ == '__main__':
-    win = Main()
-    # win.show_all()
+def run():
+    Main()
     Gtk.main()
+
+if __name__ == '__main__':
+    run()

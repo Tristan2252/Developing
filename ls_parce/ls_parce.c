@@ -19,11 +19,11 @@ int main(void)
 	while (fgets(buf, LEN, stdin)){
 		if((buf[0] == 'd') | (buf[0] == '-')){
 			strncpy(list[line], buf, LEN);
-			printf("%s", list[line]);
+			//printf("%s", list[line]);
 			line++;
 		}
 	}
-	
+/*	
 #ifdef DEBUG
 	int i;
 	char *perm_flags;
@@ -41,25 +41,32 @@ int main(void)
 	puts("");
 
 //	parce(' ', 4, list[1]);
-	printf("%s", parce_range(' ', 4, 6, list[4]));
+//
+*/
+//	printf("%s\n", parce_range(' ', 5, 7, list[4]));
+	printf("%s\n", parce_range('t', 1, 3, list[4]));
 
 	return 0;
 }
 
 char *parce_range(char c, int off_start, int off_end, char *string){
-	int cnt = 0;
+	char *new_str = malloc(LEN * sizeof(char));
+	int cnt = 0; 
+	int cnt1 = 0;
 	int i;
 	for (i = 0; i < strnlen(string, LEN); i++){
-		if (string[i] == c && cnt == off_start)
-			parce(c, off_end-off_start, &string[i]);
-		else if (string[i] == c){
-			printf("%s", &string[i]);
+		if (string[i] == c)
 			cnt++;
+		if (cnt >= off_start && cnt <= off_end){
+			new_str[cnt1] = string[i];
+			cnt1++;
 		}
 	}
 
-	return string;
+	return new_str;
 }
+
+/*
 char *parce(char c, int off_start, char *string){
 	int cnt = 0;
 	int i;
@@ -74,3 +81,4 @@ char *parce(char c, int off_start, char *string){
 
 	return string;
 }
+*/

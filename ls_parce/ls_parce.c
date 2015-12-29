@@ -7,39 +7,36 @@
 #define LEN 1023
 #define DEBUG 
 
-char *parce(char c, int off_start, char *string);
+char *strip_newline(char *string);
 char *parce_range(char c, int off_start, int off_end, char *string);
 
 int main(void)
 {
-	char list[LEN][LEN];
+	char list[LEN][LEN]; // list of strings
 	char buf[LEN];
+	int line = 0; // input line counter
 	
 	printf("\n\t>>> INPUT <<<\n");
-	int line = 0;
 	while (fgets(buf, LEN, stdin)){
-		if((buf[0] == 'd') | (buf[0] == '-')){
-			strncpy(list[line], buf, LEN);
-			printf("%s", list[line]);
-			line++;
-		}
+		strncpy(list[line], buf, LEN);
+		printf("%s", list[line]);
+		line++;
 	}
+
 	puts("");
 
-#ifdef DEBUG
 	int i;
-	printf("Permissions: Links: Owner:\n");
 	for (i = 0; i < line; i++){
-		printf("%s\n", parce_range(' ', 0, 2, list[i]));
+		printf("%s\n", parce_range(' ', 0, 3, list[i]));
 	}
-#endif
 
 	return 0;
 }
 
 /**
  * Function gets the characters between a range of iterations of a character, 
- * for example if the user wanted all the character between the 1st and 3rd iteration of 't'
+ * for example if the user wanted all the character between the 1st and 3rd iteration of 't
+ * NOTE: 0, 0 will get the string bwtween the first letter and the first iteration of c'
  * @param c the character to search for
  * @param off_start the offset starting point or the iteration at with to start the range
  * @param off_end the end of the range or the iteration of c at witch to stop
@@ -68,3 +65,8 @@ char *parce_range(char c, int off_start, int off_end, char *string){
 	return new_str;
 }
 
+char *strip_newline(char *string)
+{
+	char *strip_str;	
+	return strip_str;
+}

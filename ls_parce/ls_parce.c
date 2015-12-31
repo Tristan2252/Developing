@@ -27,7 +27,7 @@ int main(void)
 
 	int i;
 	for (i = 0; i < line; i++){
-		printf("%s\n", parce_range(' ', 0, 3, list[i]));
+		printf("%s\n", parce_range('t', 1, 3, list[i]));
 	}
 
 	return 0;
@@ -52,12 +52,9 @@ char *parce_range(char c, int off_start, int off_end, char *string){
 		if (string[i] == c)
 			cnt++;
 		if (cnt >= off_start && cnt <= off_end){
-			if (index == 0 && string[i] == c) // fixes adding first character that is = c
-				;
-			else{
+			if (!(index == 0 && string[i] == c)){ // fixes adding first character that is = c
 				new_str[index] = string[i]; // adding characters to new string
 				index++;
-
 			}
 		}
 	}

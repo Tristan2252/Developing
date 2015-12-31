@@ -10,25 +10,46 @@
 char *strip_newline(char *string);
 char *parce_range(char c, int off_start, int off_end, char *string);
 
-int main(void)
+int main(int argc, char *argv[])
 {
 	char list[LEN][LEN]; // list of strings
-	char buf[LEN];
-	int line = 0; // input line counter
+	char *buf = malloc(LEN * sizeof(char));
+	char input[LEN] = "";
+	int line = 1; // input line counter
 	
-	while (fgets(buf, LEN, stdin)){
-		strncpy(list[line], buf, LEN);
-
-#ifdef DEBUG // for debuging
-		printf("%s", list[line]);
-#endif
-
+	int start = 0;
+	int end = 0;
+	char cmd;
+	while (cmd != -1){
+		cmd = getopt(argc, argv, "s:e:i:");
+		switch (cmd){
+		case 's':
+			start = atoi(optarg);
+			break;
+		case 'e':
+			end = atoi(optarg);
+			break;
+		case 'i':
+			strncpy(input, optarg, LEN);
+			break;
+		}
+	}
+	
+	int i;
+	buf = strtok(input, "\n");
+	strncpy(list[0], buf, LEN);
+	
+	while (buf){
+		buf = strtok(NULL, "\n");
+		if (!buf)
+			break;
+		else
+			strncpy(list[line], buf, LEN);
 		line++;
 	}
 
-	int i;
 	for (i = 0; i < line; i++){
-		printf("%s\n", parce_range('t', 1, 3, list[i]));
+		printf("%s\n", parce_range(' ', start, end, list[i]));
 	}
 
 	return 0;

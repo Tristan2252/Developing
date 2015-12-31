@@ -1,10 +1,11 @@
 CC=gcc
 CFAGS=-g -Wall
 
-all: ls_parce
+all: slice_parce
 
-ls_parce: ls_parce.c
-	$(CC) $(CFAGS) ls_parce.c -o ls_parce
+slice_parce: slice_parce.c 
+	$(CC) $(CFAGS) slice_parce.c -o slice_parce
 
 clean:
-	rm ls_parce
+	rm slice_parce
+

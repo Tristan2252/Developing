@@ -5,7 +5,7 @@
 #include <string.h>
 
 #define LEN 1023
-#define DEBUG 
+//#define DEBUG 
 
 char *strip_newline(char *string);
 char *parce_range(char c, int off_start, int off_end, char *string);
@@ -16,14 +16,15 @@ int main(void)
 	char buf[LEN];
 	int line = 0; // input line counter
 	
-	printf("\n\t>>> INPUT <<<\n");
 	while (fgets(buf, LEN, stdin)){
 		strncpy(list[line], buf, LEN);
+
+#ifdef DEBUG // for debuging
 		printf("%s", list[line]);
+#endif
+
 		line++;
 	}
-
-	puts("");
 
 	int i;
 	for (i = 0; i < line; i++){

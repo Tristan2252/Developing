@@ -62,11 +62,24 @@ char *parce_range(char c, int off_start, int off_end, char *string){
 		}
 	}
 
-	return new_str;
+	return strip_newline(new_str); // strip neline if one
 }
 
+/**
+ * Function takis in a string and tests for newline characters, if found they
+ * are taken out be excluding them from the string being retuned
+ * @param string the string to test
+ * @return the striped string
+ */
 char *strip_newline(char *string)
 {
-	char *strip_str;	
+	char *strip_str = malloc(LEN * sizeof(char)); // set size large for large strings
+	int i;
+
+	for (i = 0; i < strnlen(string, LEN); i++){
+		if (string[i] != '\n') // if = to newline character is not added to string
+			strip_str[i] = string[i];
+	}
+		
 	return strip_str;
 }

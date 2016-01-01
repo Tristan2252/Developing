@@ -2,17 +2,18 @@
 
 if [ $1 ]; then 
 	ls_out=$(ls -l $1)
-else	
-	ls_out=$(ls -l $1 | sed -n '1!p') # sed removes total line from ls output
+else
+	echo "Testable File Name needed"
+	exit 1
 fi
 
 date_out=$(date)
 
 
-file_time=$(echo "$ls_out" | ./slice_parce)
-date_time=$(echo "$date_out" | ./slice_parce)
+file_time=$(./slice_parce -s 5 -e 7 -i "$ls_out")
+date_time=$(./slice_parce -s 1 -e 4 -i "$date_out")
 
 echo "$file_time"
-echo "$date_out"
+echo "$date_time"
 
 exit 0

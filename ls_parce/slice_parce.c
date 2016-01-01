@@ -7,21 +7,24 @@
 #define LEN 1023
 //#define DEBUG 
 
+void help_menu(void);
 char *strip_newline(char *string);
 char *parce_range(char c, int off_start, int off_end, char *string);
 
 int main(int argc, char *argv[])
 {
-	char list[LEN][LEN]; // list of strings
-	char *buf = malloc(LEN * sizeof(char));
-	char input[LEN] = "";
-	int line = 1; // input line counter
-	
+	char list[LEN][LEN]; 	// list of strings to store input lines
+	char input[LEN] = ""; 	// string to coppy input into
+	char *token; 		// used with strtok to get indevidual lines of the input
+	int line = 0; 		// input line counter
+	char delim = 32; 	// delimeter for parcing. 32 is SPACE, default setting
 	int start = 0;
 	int end = 0;
+	
 	char cmd;
 	while (cmd != -1){
-		cmd = getopt(argc, argv, "s:e:i:");
+		// NOTE to self, ':' need to falow each flag representing the arg
+		cmd = getopt(argc, argv, "s:e:i:d:h");
 		switch (cmd){
 		case 's':
 			start = atoi(optarg);
@@ -32,24 +35,25 @@ int main(int argc, char *argv[])
 		case 'i':
 			strncpy(input, optarg, LEN);
 			break;
+		case 'd':
+			delim = optarg[0];
+			break;
+		case 'h':
+			help_menu();
+			return 0;
 		}
 	}
 	
-	int i;
-	buf = strtok(input, "\n");
-	strncpy(list[0], buf, LEN);
-	
-	while (buf){
-		buf = strtok(NULL, "\n");
-		if (!buf)
-			break;
-		else
-			strncpy(list[line], buf, LEN);
+	token = strtok(input, "\n"); // setup first token
+	while (token){
+		strncpy(list[line], token, LEN);
 		line++;
+		token = strtok(NULL, "\n");
 	}
 
+	int i;
 	for (i = 0; i < line; i++){
-		printf("%s\n", parce_range(' ', start, end, list[i]));
+		printf("%s\n", parce_range(delim, start, end, list[i]));
 	}
 
 	return 0;
@@ -101,4 +105,25 @@ char *strip_newline(char *string)
 	}
 		
 	return strip_str;
+}
+
+/**
+ * Prints help menu for user to see accepted commands
+ */
+void help_menu(void){
+	puts("");
+	puts("BASIC USAGE");
+	puts("-i <string> the string to parce");
+	puts("");
+	puts("OPTIONAL COMMANDS");
+	puts("-s <int> iteration of delimiter to start parce");
+	puts("-e <int> iteration of delimiter to end parce");
+	puts("-d <char> parcing delimiter");
+	puts("-h help menu");
+	puts("");
+	puts("Default values, for optional settings");
+	puts("-s = 0");
+	puts("-e = 0");
+	puts("-d = ' '");
+	puts("");
 }

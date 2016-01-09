@@ -18,19 +18,28 @@ def check_file(file_name):
 
 def main():
     filename = str(sys.argv[1]) # arg 1 sould be filename
+    if not filename:
+        print "Please use first argument as file name"
+        return 3
 
     if ".jpg" not in str(sys.argv[2]): # if file not .jpg ask for .jpg
         art = input("Enter a .jpg file: ")
     else:
         art = str(sys.argv[2]) # arg 2 will be the picture to add 
+    
+    if not art:
+        print "Please use second argument as .jpg file name"
+        return 3
 
-    if check_file(filename) & check_file(art): # check if both files exist 
-        print "Adding {} to {} as album conver!".format(art, filename)
-        imagedata = open(art, "rb").read() # open image
+    check_file(filename)
+    check_file(art)
 
-        audiofile = eyed3.load(filename)
-        audiofile.tag.images.set(3, imagedata, "image/jpeg", u" ")
-        audiofile.tag.save()
+    print "Adding {} to {} as album conver!".format(art, filename)
+    imagedata = open(art, "rb").read() # open image
+
+    audiofile = eyed3.load(filename)
+    audiofile.tag.images.set(3, imagedata, "image/jpeg", u" ")
+    audiofile.tag.save()
 
 if __name__ == "__main__":
     main()

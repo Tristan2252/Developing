@@ -23,5 +23,11 @@ fi
 
 # MAC OS X
 if [ "$(uname -s)" == "Darwin" ]; then
+	mkdir "$tmp_file"
+	youtube-dl -o "$tmp_file/ytdl_out.%(ext)s" $link
+	
+	file=$(ls $tmp_file | grep '.wmv\|.avi\|.mp4') # search any video formati
+	./mp3_conv.sh "$tmp_file/$file"
+
 	exit 0
 fi

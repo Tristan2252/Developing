@@ -17,3 +17,8 @@ ffmpeg -i "$filename" \
 	-metadata artist="$artist" \
        	-b:a 192K -vn "$title.mp3"
 
+ffmpeg -i $filename -ss 00:00:01.000 -vframes 1 output.jpg
+# add album art
+python alb_add.py "$title.mp3" "output.jpg"
+
+exit 0

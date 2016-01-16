@@ -2,3 +2,7 @@ __pycache__/
 .idea/
 *.pyc
 gnome-shell.css.DEFAULT
+.DS_Store
+*.swp
+*.swo
+*.swn

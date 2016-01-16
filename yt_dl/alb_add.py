@@ -34,12 +34,12 @@ def main():
     check_file(filename)
     check_file(art)
 
-    print "Adding {} to {} as album conver!".format(art, filename)
     imagedata = open(art, "rb").read() # open image
 
     audiofile = eyed3.load(filename)
     audiofile.tag.images.set(3, imagedata, "image/jpeg", u" ")
     audiofile.tag.save()
+    print "\n\nAdded {} to {} as album conver!\n\n".format(art, filename)
 
 if __name__ == "__main__":
     main()

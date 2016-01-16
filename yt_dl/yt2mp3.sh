@@ -4,6 +4,14 @@ tmp_file=/tmp/ytdl
 dl_quality="22"
 log=0 # amout of output for ffmpeg, check man page for more info
 
+# Function to show status indecator
+status_ind (){
+	while kill -0 $1 2> /dev/null; do
+		printf "."
+		sleep 1
+	done
+}
+
 # if command line arg exists set = to link
 if [ $1 ]; then
 	link=$1
@@ -15,15 +23,6 @@ else
 		echo
 	done
 fi
-
-# Function to show status indecator
-status_ind (){
-	while kill -0 $1 2> /dev/null; do
-		printf "."
-		sleep 1
-	done
-}
-
 
 ####  DOWNLOAD ####
 
@@ -90,7 +89,7 @@ while [ 1 ]; do # prompt user until correct input
 	fi
 done
 			
-alb_add "$title.mp3" "$art_path" # add album art with python
+python2.7 alb_add.py "$title.mp3" "$art_path" # add album art with python
 
 # cleaning up
 rm -r "$tmp_file"

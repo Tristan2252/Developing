@@ -5,16 +5,21 @@ INSTALL_DIR="/usr/local/bin"
 HOMEBREW="/usr/local/bin/brew"
 EYED3="/usr/local/lib/python2.7/site-packages/eyed3"
 FFMPEG="/usr/local/bin/ffmpeg"
+PYTHON="/usr/bin/python2.7"
 
 yt2mp3_install ()
 {
 	cp yt2mp3.sh $INSTALL_DIR/yt2mp3
-	cp alb_add.py $INSTALL_DIR/alb_add
+
+	python_dir="/usr/local/lib/python2.7/site-packages/yt2mp3"
+	mkdir $python_dir
+	cp alb_add.py $python_dir
 	
-	if [ -e $INSTALL_DIR/alb_add ]; then
-		printf "\nalb_add installed\n"
-	elif [ -e $INSTALL_DIR/yt2mp3 ]; then
-		printf "\nYt2mp3 installed\n"
+	if [ -e $python_dir/alb_add.py ]; then
+		printf "alb_add installed\n"
+	fi
+	if [ -e $INSTALL_DIR/yt2mp3 ]; then
+		printf "Yt2mp3 installed\n"
 	fi
 }
 
@@ -41,15 +46,26 @@ eyed3_install ()
 {
 	brew install eyeD3
 	if [ -e $EYED3 ]; then # make sure it installed
-		printf "\neyeD3 installed\n"
+		printf "\nffmpeg missing or not installed correctly\n"
+		exit 1
 	fi
 }
 
 ffmpeg_install ()
 {
 	brew install ffmpeg
-	if [ -e $FFMPEG ]; then # make sure it installed
-		printf "\nffmpeg installed\n"
+	if ! [ -e $FFMPEG ]; then # make sure it installed
+		printf "\nffmpeg missing or not installed correctly\n"
+		exit 1
+	fi
+}
+
+python_install ()
+{
+	brew install python
+	if ! [ -e  $PYTHON ]; then
+		printf "\npython missing or not installed correctly\n"
+		exit 1
 	fi
 }
 
@@ -59,16 +75,25 @@ darwin_install (){
 	if ! [ -e $HOMEBREW ]; then
 		hb_install
 	fi
+	printf "Homebrew installed\n"
 
 	if ! [ -e $EYED3 ]; then
 		eyed3_install
 	fi
+	printf "eyeD3 installed\n"
 
 	if ! [ -e $FFMPEG ]; then
 		ffmpeg_install
 	fi
+	printf "ffmpeg installed\n"
+
+	if ! [ -e $PYTHON ]; then
+		python_install
+	fi
+	printf "python2.7 installed\n"
 	
 	yt2mp3_install
+	printf "\n\nInstall Finished!"
 }
 
 if [ $(uname -s) == "Darwin" ]; then
